@@ -1,0 +1,46 @@
+name: nanochat-speedrun
+eval_version: "nanochat-eval@0.1.0"
+
+# The single mutable file, per the upstream design: everything in train.py is
+# fair game (architecture, optimizer, hyperparameters); prepare.py and the
+# evaluator are frozen.
+mutable:
+  - train.py
+
+command:
+  candidate: sh autolab/run_candidate.sh
+  evaluate: python3 autolab/evaluator/evaluate.py
+
+# train.py is not seed-parameterized upstream; one seed until it is.
+seeds: [0]
+
+promotion:
+  metric: val_bpb
+  direction: minimize
+  # Roughly the observed run-to-run noise band; tighten after measuring
+  # baseline variance properly (plan review F4).
+  min_effect: 0.003
+
+sandbox:
+  backend: auto          # darwin locally; 'none' (warned) on the Linux GPU box until bwrap backend lands
+  allow_network: false   # data + tokenizer are pre-fetched by prepare.py
+  hidden:
+    - autolab/datasets/hidden
+  read_allow:
+    - ~/.cache/autoresearch    # shards + tokenizer (read-only data cache)
+  write_allow:                 # torch.compile / triton / CUDA caches
+    - ~/.cache/torchinductor
+    - ~/.triton
+    - ~/.nv
+
+resources:
+  max_seconds: 900       # hard wall-clock cap: 5-min budget + startup/compile slack
+
+# Symlinked from the control checkout into each experiment worktree so
+# candidates reuse the synced venv instead of re-resolving torch every run.
+shares:
+  - .venv
+
+# On gmacko-mini the main container runs near-full; keep worktrees on the
+# roomier SSD. Linux GPU workers can override or drop this.
+worktree_base: /Volumes/dev-ssd/autolab-worktrees
