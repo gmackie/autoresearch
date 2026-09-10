@@ -1,0 +1,330 @@
+<meta charset="utf-8">
+<title>Autoresearch Harness — Generalized Autonomous Research Platform</title>
+<style>
+  :root{
+    --bg:#0b0f10; --panel:#11181a; --panel2:#0e1416; --ink:#d7e0dd; --dim:#8fa39c;
+    --acc:#4de0a5; --acc2:#5ec8e5; --warn:#e5b45e; --bad:#e57373; --line:#1e2b2c;
+    --mono:Menlo,Consolas,"SF Mono",monospace;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 -apple-system,"Segoe UI",Helvetica,Arial,sans-serif}
+  .hero{
+    padding:64px 24px 48px;border-bottom:1px solid var(--line);
+    background:
+      repeating-linear-gradient(0deg,transparent 0 3px,rgba(77,224,165,.025) 3px 4px),
+      radial-gradient(1100px 500px at 15% -10%,rgba(77,224,165,.14),transparent 60%),
+      radial-gradient(900px 420px at 90% 0%,rgba(94,200,229,.12),transparent 60%),
+      var(--bg);
+  }
+  .wrap{max-width:900px;margin:0 auto;padding:0 24px}
+  .hero .wrap{padding:0}
+  .hero .inner{max-width:900px;margin:0 auto}
+  .kicker{font-family:var(--mono);font-size:12px;letter-spacing:.25em;text-transform:uppercase;color:var(--acc);margin:0 0 12px}
+  h1{font-size:40px;line-height:1.15;margin:0 0 14px;letter-spacing:-.5px}
+  h1 .badge{vertical-align:middle}
+  .meta{font-family:var(--mono);font-size:13px;color:var(--dim)}
+  .badge{display:inline-block;font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;
+    padding:3px 10px;border-radius:999px;border:1px solid var(--line);margin-left:10px}
+  .badge.draft{color:var(--warn);border-color:rgba(229,180,94,.4);background:rgba(229,180,94,.08)}
+  .badge.ok{color:var(--acc);border-color:rgba(77,224,165,.4);background:rgba(77,224,165,.08)}
+  .badge.todo{color:var(--dim);background:rgba(143,163,156,.08)}
+  .badge.hi{color:var(--bad);border-color:rgba(229,115,115,.4);background:rgba(229,115,115,.08)}
+  .badge.med{color:var(--warn);border-color:rgba(229,180,94,.4);background:rgba(229,180,94,.08)}
+  .badge.lo{color:var(--acc2);border-color:rgba(94,200,229,.4);background:rgba(94,200,229,.08)}
+  .tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:28px auto 0;max-width:900px}
+  .tile{background:rgba(17,24,26,.8);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+  .tile b{display:block;font-size:28px;color:var(--acc);font-family:var(--mono)}
+  .tile span{font-size:12px;color:var(--dim);text-transform:uppercase;letter-spacing:.08em}
+  h2{font-size:24px;margin:56px 0 12px;color:var(--acc);letter-spacing:-.2px}
+  h2::before{content:"§ ";color:var(--dim);font-family:var(--mono);font-size:18px}
+  h3{font-size:17px;margin:28px 0 8px;color:var(--acc2)}
+  p,li{max-width:75ch}
+  a{color:var(--acc2)}
+  code{font-family:var(--mono);font-size:.88em;background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:1px 5px}
+  pre{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:16px;overflow-x:auto;font-family:var(--mono);font-size:13px;line-height:1.55}
+  pre code{background:none;border:none;padding:0}
+  table{border-collapse:collapse;width:100%;margin:14px 0;font-size:14px}
+  th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+  th{background:var(--panel);font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--dim)}
+  td code{white-space:nowrap}
+  .callout{border:1px solid var(--line);border-left:3px solid var(--acc);background:var(--panel);border-radius:8px;padding:14px 18px;margin:18px 0}
+  .callout.warn{border-left-color:var(--warn)}
+  .callout.bad{border-left-color:var(--bad)}
+  .callout p{margin:.4em 0}
+  details{border:1px solid var(--line);border-radius:8px;background:var(--panel2);margin:10px 0;padding:0}
+  summary{cursor:pointer;padding:10px 16px;font-weight:600;color:var(--acc2)}
+  details[open] summary{border-bottom:1px solid var(--line)}
+  details .body{padding:6px 18px 14px}
+  figure.diagram{margin:24px 0;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px;overflow-x:auto}
+  figure.diagram svg{max-width:100%;height:auto}
+  figcaption{font-family:var(--mono);font-size:12px;color:var(--dim);margin-top:10px}
+  .timeline{list-style:none;margin:20px 0;padding:0 0 0 26px;border-left:2px solid var(--line)}
+  .timeline li{position:relative;margin:0 0 20px;padding-left:14px}
+  .timeline li::before{content:"";position:absolute;left:-33px;top:6px;width:11px;height:11px;border-radius:50%;
+    background:var(--bg);border:2px solid var(--acc)}
+  .timeline li b{color:var(--ink)}
+  .timeline li .ph{font-family:var(--mono);color:var(--acc);font-size:12px;letter-spacing:.1em;text-transform:uppercase;display:block}
+  .cols{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  @media(max-width:720px){.cols{grid-template-columns:1fr}}
+  .footer{margin:72px 0 40px;color:var(--dim);font-family:var(--mono);font-size:12px;border-top:1px solid var(--line);padding-top:18px}
+</style>
+
+<div class="hero"><div class="inner wrap">
+  <p class="kicker">Research Control Plane · gmackie lab</p>
+  <h1>Autoresearch Harness <span class="badge ok">Phase 0 built</span></h1>
+  <p class="meta">2026-08-30 · autoresearch @ master · graham.mackie · reviewed by Claude (findings in §Review)</p>
+  <p style="max-width:72ch;color:var(--dim)">A generalized Karpathy-style autonomous experimentation platform: convert the engineering portfolio — 3DGS, LevelForge, Veritas, TaxLens, mocap, FabForge, OT, media, ops, CFD — into machine-operable scientific environments driven by one research loop.</p>
+  <div class="tiles">
+    <div class="tile"><b>21</b><span>environments</span></div>
+    <div class="tile"><b>9</b><span>phases</span></div>
+    <div class="tile"><b>5</b><span>Tier S+ targets</span></div>
+    <div class="tile"><b>1×</b><span>RTX 4070 worker</span></div>
+    <div class="tile"><b>9</b><span>review findings</span></div>
+  </div>
+</div></div>
+
+<div class="wrap">
+
+<h2>Overview</h2>
+<p>Build a reusable research runtime implementing the autoresearch loop — baseline → constrained mutation → reproducible experiment → objective evaluation → keep/revert → durable record → repeat — and apply it across the whole project portfolio, not just ML training.</p>
+<div class="callout">
+  <p><b>Thesis:</b> any project becomes a candidate for autonomous research once we can define an experimental artifact, an isolated evaluator, measurable outcomes, and boundaries on what the researcher may modify. The hard engineering problem is not the researcher — it is <code>evaluate()</code>. A weak evaluator trains an agent to game the benchmark; a strong evaluator trains an autonomous engineer.</p>
+</div>
+<div class="callout warn">
+  <p><b>Prime directive:</b> the research agent never controls the evaluator. Evaluator code, hidden datasets, and promotion corpora sit behind an immutable boundary enforced by real sandboxing, not convention.</p>
+</div>
+
+<h2>Goals &amp; Non-goals</h2>
+<div class="cols">
+<div>
+<h3>Goals</h3>
+<ul>
+  <li>One reusable runtime: experiment spec, isolated candidate runner, immutable evaluator, JSONL history, leaderboard, keep/revert, seed &amp; resource accounting.</li>
+  <li>A universal per-project contract (<code>research.yaml</code> + <code>autoresearch/</code> layout) that works for Python, Rust, Go, prompts, netlists, scenes, geometries.</li>
+  <li>Hard gates first; metric vectors preserved; Pareto archive; variance penalties; hidden promotion corpora; resource cost as a first-class metric.</li>
+  <li>Durable experiment records that become institutional memory (eventually a knowledge graph).</li>
+  <li>Explicit anti-reward-hacking posture: per-environment <code>THREATS.md</code>, exploits become regression tests.</li>
+</ul>
+</div>
+<div>
+<h3>Non-goals (v1)</h3>
+<ul>
+  <li>No multi-agent research org (Director / Literature / Analyst split) until Phase 1 environments have run for weeks — one agent, one loop.</li>
+  <li>No meta-research (optimizing the researcher) until environments are trustworthy.</li>
+  <li>No Pareto-based promotion decisions in v1 — Pareto is an archive; promotion is a declared scalar (see Review F2).</li>
+  <li>No learned/human-preference evaluators in early phases; start where ground truth is crisp.</li>
+  <li>No autonomous experimentation on live users (curriculum work runs on simulation/retrospective data only).</li>
+</ul>
+</div>
+</div>
+
+<h2>Architecture</h2>
+<figure class="diagram">
+<svg id="plan-arch" width="100%" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="flowchart" style="max-width: 670.477px; background-color: transparent;" viewBox="0 0 670.4765625 1150.5" role="graphics-document document" aria-roledescription="flowchart-v2"><style>#plan-arch{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;fill:#ccc;}@keyframes edge-animation-frame{from{stroke-dashoffset:0;}}@keyframes dash{to{stroke-dashoffset:0;}}#plan-arch .edge-animation-slow{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 50s linear infinite;stroke-linecap:round;}#plan-arch .edge-animation-fast{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 20s linear infinite;stroke-linecap:round;}#plan-arch .error-icon{fill:#a44141;}#plan-arch .error-text{fill:#ddd;stroke:#ddd;}#plan-arch .edge-thickness-normal{stroke-width:1px;}#plan-arch .edge-thickness-thick{stroke-width:3.5px;}#plan-arch .edge-pattern-solid{stroke-dasharray:0;}#plan-arch .edge-thickness-invisible{stroke-width:0;fill:none;}#plan-arch .edge-pattern-dashed{stroke-dasharray:3;}#plan-arch .edge-pattern-dotted{stroke-dasharray:2;}#plan-arch .marker{fill:lightgrey;stroke:lightgrey;}#plan-arch .marker.cross{stroke:lightgrey;}#plan-arch svg{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;}#plan-arch p{margin:0;}#plan-arch .label{font-family:"trebuchet ms",verdana,arial,sans-serif;color:#ccc;}#plan-arch .cluster-label text{fill:#F9FFFE;}#plan-arch .cluster-label span{color:#F9FFFE;}#plan-arch .cluster-label span p{background-color:transparent;}#plan-arch .label text,#plan-arch span{fill:#ccc;color:#ccc;}#plan-arch .node rect,#plan-arch .node circle,#plan-arch .node ellipse,#plan-arch .node polygon,#plan-arch .node path{fill:#1f2020;stroke:#ccc;stroke-width:1px;}#plan-arch .rough-node .label text,#plan-arch .node .label text,#plan-arch .image-shape .label,#plan-arch .icon-shape .label{text-anchor:middle;}#plan-arch .node .katex path{fill:#000;stroke:#000;stroke-width:1px;}#plan-arch .rough-node .label,#plan-arch .node .label,#plan-arch .image-shape .label,#plan-arch .icon-shape .label{text-align:center;}#plan-arch .node.clickable{cursor:pointer;}#plan-arch .root .anchor path{fill:lightgrey!important;stroke-width:0;stroke:lightgrey;}#plan-arch .arrowheadPath{fill:lightgrey;}#plan-arch .edgePaths .path{stroke:lightgrey;stroke-width:1px;}#plan-arch .flowchart-link{stroke:lightgrey;fill:none;}#plan-arch .edgeLabel{background-color:hsl(0, 0%, 34.4117647059%);text-align:center;}#plan-arch .edgeLabel p{background-color:hsl(0, 0%, 34.4117647059%);}#plan-arch .edgeLabel rect{opacity:0.5;background-color:hsl(0, 0%, 34.4117647059%);fill:hsl(0, 0%, 34.4117647059%);}#plan-arch .labelBkg{background-color:rgba(87.75, 87.75, 87.75, 0.5);}#plan-arch .cluster rect{fill:hsl(180, 1.5873015873%, 28.3529411765%);stroke:rgba(255, 255, 255, 0.25);stroke-width:1px;}#plan-arch .cluster text{fill:#F9FFFE;}#plan-arch .cluster span{color:#F9FFFE;}#plan-arch .node .collapsed-indicator{fill:rgba(255, 255, 255, 0.25);stroke:none;opacity:0.6;}#plan-arch .node .collapsed-separator{stroke:rgba(255, 255, 255, 0.25);stroke-width:0.75px;}#plan-arch div.mermaidTooltip{position:absolute;text-align:center;max-width:200px;padding:2px;font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:12px;background:hsl(20, 1.5873015873%, 12.3529411765%);border:1px solid rgba(255, 255, 255, 0.25);border-radius:2px;pointer-events:none;z-index:100;}#plan-arch .flowchartTitleText{text-anchor:middle;font-size:18px;fill:#ccc;}#plan-arch rect.text{fill:none;stroke-width:0;}#plan-arch .icon-shape,#plan-arch .image-shape{background-color:hsl(0, 0%, 34.4117647059%);text-align:center;}#plan-arch .icon-shape p,#plan-arch .image-shape p{background-color:hsl(0, 0%, 34.4117647059%);padding:2px;}#plan-arch .icon-shape .label rect,#plan-arch .image-shape .label rect{opacity:0.5;background-color:hsl(0, 0%, 34.4117647059%);fill:hsl(0, 0%, 34.4117647059%);}#plan-arch .label-icon{display:inline-block;height:1em;overflow:visible;vertical-align:-0.125em;}#plan-arch .node .label-icon path{fill:currentColor;stroke:revert;stroke-width:revert;}#plan-arch .node .neo-node{stroke:#ccc;}#plan-arch [data-look="neo"].node rect,#plan-arch [data-look="neo"].cluster rect,#plan-arch [data-look="neo"].node polygon{stroke:url(#plan-arch-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#plan-arch [data-look="neo"].swimlane.cluster rect{filter:none;}#plan-arch [data-look="neo"].node path{stroke:url(#plan-arch-gradient);stroke-width:1px;}#plan-arch [data-look="neo"].node .outer-path{filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#plan-arch [data-look="neo"].node .neo-line path{stroke:#ccc;filter:none;}#plan-arch [data-look="neo"].node circle{stroke:url(#plan-arch-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#plan-arch [data-look="neo"].node circle .state-start{fill:#000000;}#plan-arch [data-look="neo"].icon-shape .icon{fill:url(#plan-arch-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#plan-arch [data-look="neo"].icon-shape .icon-neo path{stroke:url(#plan-arch-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#plan-arch :root{--mermaid-font-family:"trebuchet ms",verdana,arial,sans-serif;}</style><g><marker id="plan-arch_flowchart-v2-pointEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"/></marker><marker id="plan-arch_flowchart-v2-pointStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="4.5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 5 L 10 10 L 10 0 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"/></marker><marker id="plan-arch_flowchart-v2-pointEnd-margin" class="marker flowchart-v2" viewBox="0 0 11.5 14" refX="11.5" refY="7" markerUnits="userSpaceOnUse" markerWidth="10.5" markerHeight="14" orient="auto"><path d="M 0 0 L 11.5 7 L 0 14 z" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"/></marker><marker id="plan-arch_flowchart-v2-pointStart-margin" class="marker flowchart-v2" viewBox="0 0 11.5 14" refX="1" refY="7" markerUnits="userSpaceOnUse" markerWidth="11.5" markerHeight="14" orient="auto"><polygon points="0,7 11.5,14 11.5,0" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"/></marker><marker id="plan-arch_flowchart-v2-circleEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="11" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"/></marker><marker id="plan-arch_flowchart-v2-circleStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="-1" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"/></marker><marker id="plan-arch_flowchart-v2-circleEnd-margin" class="marker flowchart-v2" viewBox="0 0 10 10" refY="5" refX="12.25" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"/></marker><marker id="plan-arch_flowchart-v2-circleStart-margin" class="marker flowchart-v2" viewBox="0 0 10 10" refX="-2" refY="5" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"/></marker><marker id="plan-arch_flowchart-v2-crossEnd" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="12" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"/></marker><marker id="plan-arch_flowchart-v2-crossStart" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="-1" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"/></marker><marker id="plan-arch_flowchart-v2-crossEnd-margin" class="marker cross flowchart-v2" viewBox="0 0 15 15" refX="17.7" refY="7.5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M 1,1 L 14,14 M 1,14 L 14,1" class="arrowMarkerPath" style="stroke-width: 2.5;"/></marker><marker id="plan-arch_flowchart-v2-crossStart-margin" class="marker cross flowchart-v2" viewBox="0 0 15 15" refX="-3.5" refY="7.5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M 1,1 L 14,14 M 1,14 L 14,1" class="arrowMarkerPath" style="stroke-width: 2.5; stroke-dasharray: 1, 0;"/></marker><g class="root"><g class="clusters"/><g class="edgePaths"><path d="M330.138,110L325.615,114.167C321.092,118.333,312.046,126.667,307.523,134.333C303,142,303,149,303,152.5L303,156" id="plan-arch-L_MR_RA_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_MR_RA_0" data-points="W3sieCI6MzMwLjEzODE1Nzg5NDczNjgsInkiOjExMH0seyJ4IjozMDMsInkiOjEzNX0seyJ4IjozMDMsInkiOjE2MH1d" data-look="classic" marker-end="url(#plan-arch_flowchart-v2-pointEnd)"/><path d="M247.638,262L243.115,266.167C238.592,270.333,229.546,278.667,225.023,286.333C220.5,294,220.5,301,220.5,304.5L220.5,308" id="plan-arch-L_RA_CW_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_RA_CW_0" data-points="W3sieCI6MjQ3LjYzODE1Nzg5NDczNjg1LCJ5IjoyNjJ9LHsieCI6MjIwLjUsInkiOjI4N30seyJ4IjoyMjAuNSwieSI6MzEyfV0=" data-look="classic" marker-end="url(#plan-arch_flowchart-v2-pointEnd)"/><path d="M174.094,438L168.078,446.167C162.063,454.333,150.031,470.667,144.016,486.333C138,502,138,517,138,524.5L138,532" id="plan-arch-L_CW_EV_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_CW_EV_0" data-points="W3sieCI6MTc0LjA5Mzc1LCJ5Ijo0Mzh9LHsieCI6MTM4LCJ5Ijo0ODd9LHsieCI6MTM4LCJ5Ijo1MzZ9XQ==" data-look="classic" marker-end="url(#plan-arch_flowchart-v2-pointEnd)"/><path d="M138,638L138,644.167C138,650.333,138,662.667,138,674.333C138,686,138,697,138,702.5L138,708" id="plan-arch-L_EV_MV_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_EV_MV_0" data-points="W3sieCI6MTM4LCJ5Ijo2Mzh9LHsieCI6MTM4LCJ5Ijo2NzV9LHsieCI6MTM4LCJ5Ijo3MTJ9XQ==" data-look="classic" marker-end="url(#plan-arch_flowchart-v2-pointEnd)"/><path d="M138,790L138,794.167C138,798.333,138,806.667,156.295,823.279C174.589,839.892,211.178,864.783,229.473,877.229L247.768,889.675" id="plan-arch-L_MV_PP_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_MV_PP_0" data-points="W3sieCI6MTM4LCJ5Ijo3OTB9LHsieCI6MTM4LCJ5Ijo4MTV9LHsieCI6MjUxLjA3NDg0MjIwMDE4MDM0LCJ5Ijo4OTEuOTI1MTU3Nzk5ODE5N31d" data-look="classic" marker-end="url(#plan-arch_flowchart-v2-pointEnd)"/><path d="M303,1014.5L303,1020.667C303,1026.833,303,1039.167,318.277,1051.259C333.554,1063.351,364.108,1075.202,379.384,1081.128L394.661,1087.053" id="plan-arch-L_PP_CH_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_PP_CH_0" data-points="W3sieCI6MzAzLCJ5IjoxMDE0LjV9LHsieCI6MzAzLCJ5IjoxMDUxLjV9LHsieCI6Mzk4LjM5MDYyNSwieSI6MTA4OC41fV0=" data-look="classic" marker-end="url(#plan-arch_flowchart-v2-pointEnd)"/><path d="M303,840L303,835.833C303,831.667,303,823.333,303,808.5C303,793.667,303,772.333,303,749C303,725.667,303,700.333,303,673C303,645.667,303,616.333,303,585C303,553.667,303,520.333,297.38,496.037C291.76,471.74,280.519,456.48,274.899,448.85L269.279,441.221" id="plan-arch-L_PP_CW_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_PP_CW_0" data-points="W3sieCI6MzAzLCJ5Ijo4NDB9LHsieCI6MzAzLCJ5Ijo4MTV9LHsieCI6MzAzLCJ5Ijo3NTF9LHsieCI6MzAzLCJ5Ijo2NzV9LHsieCI6MzAzLCJ5Ijo1ODd9LHsieCI6MzAzLCJ5Ijo0ODd9LHsieCI6MjY2LjkwNjI1LCJ5Ijo0Mzh9XQ==" data-look="classic" marker-end="url(#plan-arch_flowchart-v2-pointEnd)"/><path d="M345.115,882.115L355.552,870.929C365.989,859.743,386.864,837.372,397.301,815.519C407.738,793.667,407.738,772.333,407.738,749C407.738,725.667,407.738,700.333,407.738,673C407.738,645.667,407.738,616.333,407.738,585C407.738,553.667,407.738,520.333,407.738,485C407.738,449.667,407.738,412.333,407.738,379C407.738,345.667,407.738,316.333,402.536,297.892C397.333,279.45,386.928,271.899,381.725,268.124L376.522,264.349" id="plan-arch-L_PP_RA_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_PP_RA_0" data-points="W3sieCI6MzQ1LjExNDc4NjA0NDc1MzI2LCJ5Ijo4ODIuMTE0Nzg2MDQ0NzUzM30seyJ4Ijo0MDcuNzM4MjgxMjUsInkiOjgxNX0seyJ4Ijo0MDcuNzM4MjgxMjUsInkiOjc1MX0seyJ4Ijo0MDcuNzM4MjgxMjUsInkiOjY3NX0seyJ4Ijo0MDcuNzM4MjgxMjUsInkiOjU4N30seyJ4Ijo0MDcuNzM4MjgxMjUsInkiOjQ4N30seyJ4Ijo0MDcuNzM4MjgxMjUsInkiOjM3NX0seyJ4Ijo0MDcuNzM4MjgxMjUsInkiOjI4N30seyJ4IjozNzMuMjg0ODk5MjU5ODY4NDQsInkiOjI2Mn1d" data-look="classic" marker-end="url(#plan-arch_flowchart-v2-pointEnd)"/><path d="M507.857,1088.5L516.961,1082.333C526.064,1076.167,544.27,1063.833,553.373,1036.958C562.477,1010.083,562.477,968.667,562.477,929.25C562.477,889.833,562.477,852.417,562.477,823.042C562.477,793.667,562.477,772.333,562.477,749C562.477,725.667,562.477,700.333,562.477,673C562.477,645.667,562.477,616.333,562.477,585C562.477,553.667,562.477,520.333,562.477,485C562.477,449.667,562.477,412.333,562.477,379C562.477,345.667,562.477,316.333,562.477,289C562.477,261.667,562.477,236.333,562.477,211C562.477,185.667,562.477,160.333,553.386,143.763C544.296,127.193,526.116,119.386,517.026,115.482L507.936,111.578" id="plan-arch-L_CH_MR_0" class="edge-thickness-normal edge-pattern-dotted edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_CH_MR_0" data-points="W3sieCI6NTA3Ljg1NzI5OTgwNDY4NzUsInkiOjEwODguNX0seyJ4Ijo1NjIuNDc2NTYyNSwieSI6MTA1MS41fSx7IngiOjU2Mi40NzY1NjI1LCJ5Ijo5MjcuMjV9LHsieCI6NTYyLjQ3NjU2MjUsInkiOjgxNX0seyJ4Ijo1NjIuNDc2NTYyNSwieSI6NzUxfSx7IngiOjU2Mi40NzY1NjI1LCJ5Ijo2NzV9LHsieCI6NTYyLjQ3NjU2MjUsInkiOjU4N30seyJ4Ijo1NjIuNDc2NTYyNSwieSI6NDg3fSx7IngiOjU2Mi40NzY1NjI1LCJ5IjozNzV9LHsieCI6NTYyLjQ3NjU2MjUsInkiOjI4N30seyJ4Ijo1NjIuNDc2NTYyNSwieSI6MjExfSx7IngiOjU2Mi40NzY1NjI1LCJ5IjoxMzV9LHsieCI6NTA0LjI2MDU4Nzk5MzQyMTA0LCJ5IjoxMTB9XQ==" data-look="classic" marker-end="url(#plan-arch_flowchart-v2-pointEnd)"/></g><g class="edgeLabels"><g class="edgeLabel"><g class="label" data-id="L_MR_RA_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel"></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" data-id="L_RA_CW_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel"></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(138, 487)"><g class="label" data-id="L_CW_EV_0" transform="translate(-100, -24)"><foreignObject width="200" height="48"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 200px; text-align: center; width: 200px;"><span class="edgeLabel"><p>artifact crosses immutable boundary</p></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" data-id="L_EV_MV_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel"></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" data-id="L_MV_PP_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel"></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(303, 1051.5)"><g class="label" data-id="L_PP_CH_0" transform="translate(-17.21875, -12)"><foreignObject width="34.4375" height="24"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel"><p>keep</p></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(303, 675)"><g class="label" data-id="L_PP_CW_0" transform="translate(-22.0390625, -12)"><foreignObject width="44.078125" height="24"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel"><p>revert</p></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(407.73828125, 587)"><g class="label" data-id="L_PP_RA_0" transform="translate(-24.4765625, -12)"><foreignObject width="48.953125" height="24"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel"><p>branch</p></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(562.4765625, 587)"><g class="label" data-id="L_CH_MR_0" transform="translate(-100, -24)"><foreignObject width="200" height="48"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 200px; text-align: center; width: 200px;"><span class="edgeLabel"><p>experiment record → JSONL history</p></span></div></foreignObject></g></g></g><g class="nodes"><g class="node default" id="plan-arch-flowchart-MR-0" data-look="classic" transform="translate(385.5, 59)"><rect class="basic label-container" style="" x="-130" y="-51" width="260" height="102"/><g class="label" style="" transform="translate(-100, -36)"><rect/><foreignObject width="200" height="72"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 200px; text-align: center; width: 200px;"><span class="nodeLabel"><p>Meta Researcher<br />history → directions → budget</p></span></div></foreignObject></g></g><g class="node default" id="plan-arch-flowchart-RA-1" data-look="classic" transform="translate(303, 211)"><rect class="basic label-container" style="" x="-130" y="-51" width="260" height="102"/><g class="label" style="" transform="translate(-100, -36)"><rect/><foreignObject width="200" height="72"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 200px; text-align: center; width: 200px;"><span class="nodeLabel"><p>Research Agent<br />hypothesis → code/config change</p></span></div></foreignObject></g></g><g class="node default" id="plan-arch-flowchart-CW-3" data-look="classic" transform="translate(220.5, 375)"><rect class="basic label-container" style="" x="-130" y="-63" width="260" height="126"/><g class="label" style="" transform="translate(-100, -48)"><rect/><foreignObject width="200" height="96"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 200px; text-align: center; width: 200px;"><span class="nodeLabel"><p>Candidate workspace (mutable)<br />code · model · design · config</p></span></div></foreignObject></g></g><g class="node default" id="plan-arch-flowchart-EV-5" data-look="classic" transform="translate(138, 587)"><rect class="basic label-container" style="" x="-130" y="-51" width="260" height="102"/><g class="label" style="" transform="translate(-100, -36)"><rect/><foreignObject width="200" height="72"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 200px; text-align: center; width: 200px;"><span class="nodeLabel"><p>Evaluator (immutable)<br />hidden data · hard gates · sims · resource accounting</p></span></div></foreignObject></g></g><g class="node default" id="plan-arch-flowchart-MV-7" data-look="classic" transform="translate(138, 751)"><rect class="basic label-container" style="" x="-122.8203125" y="-39" width="245.640625" height="78"/><g class="label" style="" transform="translate(-92.8203125, -24)"><rect/><foreignObject width="185.640625" height="48"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel"><p>Metric vector<br />quality · robustness · cost</p></span></div></foreignObject></g></g><g class="node default" id="plan-arch-flowchart-PP-9" data-look="classic" transform="translate(303, 927.25)"><polygon points="87.25,0 174.5,-87.25 87.25,-174.5 0,-87.25" class="label-container" transform="translate(-86.75, 87.25)"/><g class="label" style="" transform="translate(-60.25, -12)"><rect/><foreignObject width="120.5" height="24"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel"><p>Promotion policy</p></span></div></foreignObject></g></g><g class="node default" id="plan-arch-flowchart-CH-11" data-look="classic" transform="translate(468, 1115.5)"><rect class="basic label-container" style="" x="-117.796875" y="-27" width="235.59375" height="54"/><g class="label" style="" transform="translate(-87.796875, -12)"><rect/><foreignObject width="175.59375" height="24"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel"><p>Champion + leaderboard</p></span></div></foreignObject></g></g></g></g></g><defs><filter id="plan-arch-drop-shadow" height="130%" width="130%"><feDropShadow dx="4" dy="4" stdDeviation="0" flood-opacity="0.06" flood-color="#FFFFFF"/></filter></defs><defs><filter id="plan-arch-drop-shadow-small" height="150%" width="150%"><feDropShadow dx="2" dy="2" stdDeviation="0" flood-opacity="0.06" flood-color="#FFFFFF"/></filter></defs><linearGradient id="plan-arch-gradient" gradientUnits="objectBoundingBox" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#cccccc" stop-opacity="1"/><stop offset="100%" stop-color="hsl(180, 0%, 18.3529411765%)" stop-opacity="1"/></linearGradient></svg>
+<figcaption>Research control plane. The artifact crosses an immutable boundary; only aggregate metrics flow back.</figcaption>
+</figure>
+<details class="mermaid-source"><summary>Mermaid source</summary><div class="body">
+<pre><code>flowchart TD
+  MR["Meta Researcher&lt;br/&gt;history → directions → budget"] --&gt; RA["Research Agent&lt;br/&gt;hypothesis → code/config change"]
+  RA --&gt; CW["Candidate workspace (mutable)&lt;br/&gt;code · model · design · config"]
+  CW -- "artifact crosses immutable boundary" --&gt; EV["Evaluator (immutable)&lt;br/&gt;hidden data · hard gates · sims · resource accounting"]
+  EV --&gt; MV["Metric vector&lt;br/&gt;quality · robustness · cost"]
+  MV --&gt; PP{"Promotion policy"}
+  PP -- keep --&gt; CH["Champion + leaderboard"]
+  PP -- revert --&gt; CW
+  PP -- branch --&gt; RA
+  CH -. "experiment record → JSONL history" .-&gt; MR</code></pre>
+</div></details>
+
+<h3>Universal research contract</h3>
+<p>Each participating project ships an <code>autoresearch/</code> directory: <code>objective.md</code>, <code>research.yaml</code>, <code>candidate/</code> (mutable), <code>evaluator/</code> (immutable: gates, metrics, scalarize), layered <code>datasets/</code> (development / validation / hidden), <code>scenarios/</code>, <code>baselines/</code>, <code>results/</code> (experiments.jsonl, leaderboard, artifacts).</p>
+<details><summary>research.yaml example (stereo-3dgs)</summary><div class="body">
+<pre><code>name: stereo-3dgs
+mutable:   [pipeline/**, configs/**]
+immutable: [autoresearch/evaluator/**, autoresearch/datasets/hidden/**]
+command:
+  candidate: ./run_candidate.sh
+  evaluate:  ./evaluate.sh
+resources: {gpu: 1, max_vram_gb: 11, max_cpu_threads: 8, max_disk_gb: 30}
+gates: [valid_output, no_test_view_leakage, calibration_valid]
+promotion_score: psnr_minus_lambda_vram   # v1: one declared scalar (Review F2)
+objectives:
+  psnr:          {direction: maximize}
+  lpips:         {direction: minimize}
+  train_seconds: {direction: minimize}
+  peak_vram:     {direction: minimize}</code></pre>
+</div></details>
+
+<h3>Evaluation philosophy</h3>
+<ul>
+  <li><b>Hard gates first</b> — validity is never tradable (solvable level, passing ERC, reconciling workbook, importable mesh). Gate failure ⇒ <code>invalid</code>, no rescue by quality.</li>
+  <li><b>Metric vectors, not one number</b> — full vectors persist in history; scalarization only at promotion time.</li>
+  <li><b>Pareto archive</b> — track <code>dominates(a,b)</code>; keep the frontier as institutional record.</li>
+  <li><b>Variance penalized</b> — track mean/median/σ/p05/p95/worst; promote on <code>mean − λσ</code> or p10 where worst-case matters.</li>
+  <li><b>Hidden promotion evaluation</b> — development (visible) / validation (evaluator-only) / promotion (fully hidden, rotated).</li>
+  <li><b>Repeated seeds</b> — paired seeds vs champion; reject noise-only wins (Review F4).</li>
+  <li><b>Resources are performance</b> — wall clock, GPU/CPU time, VRAM, disk, API cost, tokens on every record.</li>
+</ul>
+<details><summary>Experiment record schema + evaluator versioning</summary><div class="body">
+<pre><code>{
+  "experiment_id": "3dgs-00492",
+  "parent": "3dgs-00481",
+  "hypothesis": "Depth confidence filtering discards useful thin geometry.",
+  "changes": ["percentile confidence filter", "low-confidence Gaussians at reduced opacity"],
+  "commit": "abc123",
+  "eval_version": "3dgs-eval@1.4.0",     // Review F5
+  "dataset_hash": "sha256:…",            // Review F5
+  "seeds": [17, 42, 1337],
+  "metrics": {"psnr": 29.61, "lpips": 0.082, "ssim": 0.943, "vram_gb": 7.3},
+  "resources": {"wall_s": 1290, "gpu_s": 1180, "peak_vram_mb": 7472},
+  "result": "promoted"
+}</code></pre>
+</div></details>
+
+<h2>Environment portfolio</h2>
+<table>
+<tr><th>Tier</th><th>Environments</th><th>Why</th></tr>
+<tr><td><span class="badge ok">S+ · build first</span></td><td><b>nanochat speedrun (this repo)</b> · LevelForge · Stereo→3DGS ✓ · Veritas ProtocolGym ✓ · TaxLens · Mocap</td><td>Crisp metrics, cheap-to-moderate loops, synthetic or exact ground truth. Ordering revised per Review F1: nanochat is env #0, LevelForge before 3DGS.</td></tr>
+<tr><td><span class="badge lo">S · second wave</span></td><td>FabForge · COI verification · OT passive analyzer · ASTERIX · <b>Microduck RL (live)</b></td><td>Strong deterministic evaluation (ERC/simulation, schema+rules, synthetic labs, codec roundtrip).</td></tr>
+<tr><td><span class="badge med">A · third wave</span></td><td>3D assets · voice · Driftport · startup research · wedding streaming · QSR ops · poker/chess · radio observability</td><td>Promising but need learned evaluators, simulators, or manual annotation corpora (see Review F7).</td></tr>
+<tr><td><span class="badge todo">B · endgame</span></td><td>Whitewater / canyoning CFD</td><td>Per-experiment cost is huge; wait for multi-fidelity evaluation, surrogates, distributed workers.</td></tr>
+</table>
+
+<details><summary>Env 0 — nanochat speedrun (this repo)</summary><div class="body">
+<p><b>Mutable:</b> <code>train.py</code> only. <b>Gate:</b> run completes within 5-min budget, no NaN. <b>Metric:</b> <code>val_bpb</code> ↓ (already scalar). <b>Role:</b> validate the harness contract against a known-working loop before any new evaluator is written — the harness must reproduce what the bare Karpathy loop already does, with history/leaderboard/keep-revert on top.</p>
+</div></details>
+
+<details><summary>Env 1 — LevelForge → PlayTrek worldgen (live)</summary><div class="body">
+<p><b>Update 2026-08-30:</b> the LevelForge generator described below lives on as PlayTrek; the shipped environment is <code>playtrek-worldgen</code> — world-genesis prompt/loop as candidate, the hallMonitor evaluator suite as frozen <code>evaluate()</code>. First promoted experiment 00009 (role-voice prompts + response repair): worldgen_mean_score 0.874→0.921 over the 4 responsive evaluators; npc-consistency 0.53→0.70, world-coherence 0.99. Structural ceilings (standards-alignment, narrative-integration — the wrap emits no waves) are excluded from the promotion scalar. En route, the gates caught two evaluator false-positive families ("bet"/"race"/"shoot" keyword collisions) worth fixing upstream. The planner-based solvability metrics below remain the target for episode-level (not world-level) evaluation.</p>
+<p><b>Mutable:</b> NL constraint extraction, generator, tile weighting, constraint solver, difficulty controller, candidate selection. <b>Gates:</b> schema valid · rules satisfied · initializes · solvable (deterministic planner, not RL) · no unreachable required state.</p>
+<p><b>v1 metrics (computable):</b> solvability, difficulty error (|requested − measured| from optimal solution length / nodes expanded / branching factor), instruction coverage against parsed requirements. <b>v2 metrics (research-grade, not gating):</b> pedagogical alignment, solution diversity/entropy, cross-level diversity, controllability (Review F9). Benchmark: hundreds of prompts spanning simple, contradictory, multi-domain, difficulty-targeted, negative-constraint requests.</p>
+</div></details>
+
+<details><summary>Env 2 — Stereo → 3D Gaussian Splatting</summary><div class="body">
+<p><b>Mutable:</b> stereo matching, depth confidence filtering, pose refinement, Gaussian init, losses, LR schedules, densification/pruning, SH degree, regularization, iteration count. <b>Gates:</b> camera model valid · held-out cameras excluded · render completes · no NaNs · sane scene bounds.</p>
+<p><b>Quality:</b> PSNR↑ SSIM↑ LPIPS↓, depth error↓, multiview consistency↑. <b>Efficiency:</b> train seconds↓, peak VRAM↓, Gaussian count↓, FPS↑. Permanent stereo benchmark: tabletop, PCBs, rooms, outdoor, vehicles, vegetation, thin geometry, reflective, low-texture — some with measured depth ground truth. Budget honestly: a benchmark sweep × seeds is hours per experiment on a 4070 (Review F1).</p>
+</div></details>
+
+<details><summary>Env 3 — Veritas ProtocolGym ✓</summary><div class="body">
+<p>ProtocolFactory procedurally generates protocols (sync words, TLVs, bitfields, CRCs, counters, sessions, state machines) + reference implementations + traces. Only the evaluator sees the spec; Veritas sees raw observations. <b>Metrics:</b> message-boundary F1, field-boundary/type F1, derived-field detection (length/CRC/counter/timestamp), message clustering, state-machine precision/recall, parser generalization on unseen traffic, serializer accepted-by-hidden-reference (strongest oracle). Extensions: active RE (info gained per probe), logic-analyzer waveforms (UART/SPI/I2C-like).</p>
+</div></details>
+
+<details><summary>Env 4 — TaxLens</summary><div class="body">
+<p>PDF → structured workbook. <b>Gates:</b> schema valid, required worksheets, numeric types, identifiers preserved. <b>Metrics:</b> per-field exact/normalized/tolerance match; <b>reconciliation identities</b> (subtotal == Σchildren, tax_due == liability − payments, schedule == summary) as the strongest evaluator; grounding (source page/region/text entailment). Hallucinated fields cost far more than omissions.</p>
+</div></details>
+
+<details><summary>Env 5 — Video → Mocap</summary><div class="body">
+<p><b>Gates:</b> valid connected skeleton, physical bone lengths, monotonic timestamps, animation imports. <b>Metrics:</b> MPJPE↓, PA-MPJPE↓, reprojection error↓, foot skating↓, contact error↓, penetration↓, bone-length variation↓, jerk↓. Ground truth from mocap datasets, synthetic Unity animation, multi-camera references. Mutable: pose model config, temporal model, filtering, IK, contact detection, root motion, retargeting.</p>
+</div></details>
+
+<details><summary>Second/third-wave evaluator sketches (S / A / B tiers)</summary><div class="body">
+<ul>
+<li><b>FabForge:</b> ERC + protection gates; scenario sim (voltage extremes, surge, faults); minimize cost/mass/losses/voltage drop; serviceability scores.</li>
+<li><b>COI:</b> field accuracy, requirement satisfaction, endorsement &amp; contradiction detection; "is this vendor compliant, why, what's missing" against ground truth.</li>
+<li><b>OT analyzer:</b> synthetic industrial labs (Modbus/EtherNet-IP/BACnet/S7/OPC-UA); asset &amp; topology P/R; anomaly TPR vs FP/day; hard gate: <b>zero transmitted packets</b>, verified by evaluator.</li>
+<li><b>ASTERIX:</b> decode/roundtrip accuracy on synthetic airspace; tracking RMSE, ID switches; msgs/sec.</li>
+<li><b>3D assets / voice:</b> staged gates (import, UV, rig test-suite; WER, speaker similarity transfer, MOS predictors) — needs human-correlation program (§Eval of evaluators).</li>
+<li><b>Driftport / startup research / streaming / QSR / poker / chess / radio:</b> graph P/R vs annotated corpus; historical-snapshot reconstruction + falsification agent; network-sim video QoE + bandwidth cost; ops simulator profit objective; EV regret vs solver; centipawn loss; synthetic RF scenarios.</li>
+<li><b>CFD:</b> multi-fidelity ladder — geometric heuristic → surrogate → coarse CFD → fine CFD → physical scale test.</li>
+</ul>
+</div></details>
+
+<h2>Anti-reward-hacking</h2>
+<ul>
+  <li>Every environment maintains <code>autoresearch/THREATS.md</code> (e.g. 3DGS memorizing validation views; LevelForge trivially-solvable levels; TaxLens hardcoded common values; Veritas recognizing generator seeds; FabForge deleting loads).</li>
+  <li>Every discovered exploit becomes a regression test. Attempted gaming is treated as useful output — the agent is fuzzing our definition of success.</li>
+  <li>Candidate isolation: container/VM, no evaluator source, no hidden data, no per-case promotion scores, no secrets; aggregate metrics only for adversarial environments. Evaluator executes candidate artifacts <b>inside the sandbox</b>, never with evaluator privileges (Review F3).</li>
+  <li>Evaluation of evaluators: periodically sample good/medium/bad/odd-Pareto candidates for human review; track metric↔human correlation, especially for 3D assets, voice, pedagogy, research reports.</li>
+</ul>
+
+<h2>Roadmap</h2>
+<ul class="timeline">
+  <li><span class="ph">Phase 0 — Core runtime</span><b>Spec, sandboxed runners, history, keep/revert.</b> Validated against env #0 (this repo's trainer).</li>
+  <li><span class="ph">Phase 1 — First environments</span><b>PlayTrek worldgen (LLM) + protocolgym (synthetic).</b> Combinatorial generation vs continuous ML — one contract fit both; architecture holds.</li>
+  <li><span class="ph">Phase 2 — Ground-truth heavy</span><b>ProtocolGym + structdefect + dronesplat-nvs + microduck-locomotion live; TaxLens next.</b> microduck-locomotion (2026-08-31) wraps pollen-robotics/microduck_rl (mjlab/MuJoCo-Warp PPO) as an RL reward-design environment: candidate tunes reward weights, real PPO trains on the 4070 Ti over SSH, evaluator scores raw velocity-tracking error + fall rate (independent of the shaped reward). Baseline score -0.077 -> promoted -0.040 (fall_fraction 0.38->0.20). Same GPU box + ssh pattern as dronesplat. structdefect = stereo→heightfield reconstruction + structural defect identification (crack/pit/bulge/spall), the CPU-tractable proxy for the dronesplat stereo→3DGS pipeline: baseline 0.065 → champion 0.297 inspection_score over 3 experiments, 0.32 on the hidden corpus. dronesplat-nvs adds the real Scene-Package→held-out-view contract scored with dronesplat's own PSNR/SSIM: local CPU backend live (13.2→13.8 dB, 13.5 on hidden), and a wired gentrellis backend that submits real gsplat jobs to the RTX 4070 Ti GPU queue. That queue is an APPROVED gentrellis design mid-rollout — consumer submit side exists, but the gsplat job type, worker-claim API, and the WSL2 node agent/runner on the 4070 box are not built yet, The direct path is now LIVE: gsplat (torch 2.6+cu124) is installed in WSL on the 4070 Ti, and dronesplat-nvs's ssh4070 backend drives real GPU gsplat training end-to-end through the sandboxed harness (ship Scene Package over SSH -> train+render on GPU -> pull -> score with dronesplat PSNR/SSIM). After moving the factory to a 3D-consistent pinhole projection (eval 0.2.0, camera params shared with the runner via scene.json), real gsplat on the 4070 is now the PROMOTED champion: 34.18 dB (SSIM 0.979) vs the CPU depth-warp's 19.07 dB — a +15.1 dB win through the full sandbox->ssh->4070->gsplat->score loop, and 33.77 dB on the hidden corpus (generalizes). On-box env: torch 2.6+cu124 + gsplat in WSL Ubuntu-24.04, CUDA 12.6. The multi-tenant gentrellis job-queue path (worker-claim API + gsplat job type + WSL node agent) remains the productionization layer on top of this working direct path. Synthetic binary-protocol inference: baseline 0.29 → champion 1.0 structure_score, verified 1.0 on the hidden corpus. Standalone repo /Volumes/dev/protocolgym. TaxLens: structured extraction still to come.</li>
+  <li><span class="ph">Phase 3 — Physical &amp; temporal</span><b>Mocap, FabForge.</b> Physics constraints, engineering simulation.</li>
+  <li><span class="ph">Phase 4 — Generative media</span><b>3D assets, voice.</b> Forces learned evaluators + human-preference correlation.</li>
+  <li><span class="ph">Phase 5 — Operational systems</span><b>OT, streaming, QSR, Driftport, ASTERIX, radio.</b></li>
+  <li><span class="ph">Phase 6 — Research agents</span><b>Startup/market/literature research</b> on the same infrastructure.</li>
+  <li><span class="ph">Phase 7 — Meta research</span><b>Benchmark researchers against frozen environments;</b> optimize the scientist (improvement/GPU-hour, valid-experiment rate, regression rate).</li>
+  <li><span class="ph">Phase 8 — CFD</span><b>Computational engineering endgame</b> on mature multi-fidelity infrastructure.</li>
+</ul>
+
+<h3>Phase 0 — Core runtime <span class="badge ok">Built 2026-08-30</span></h3>
+<table>
+<tr><th>Task</th><th>Files</th><th>Verification</th><th>Status</th></tr>
+<tr><td>New repo scaffold (name TBD: researchforge / labforge / autolab)</td><td><code>cmd/</code> or <code>src/</code>, <code>pkg/{experiment,environment,metrics,scheduler,artifacts,leaderboard,git,sandbox}</code>, <code>examples/</code></td><td>repo builds; CI green</td><td><span class="badge ok">Done</span></td></tr>
+<tr><td>Minimal <code>research.yaml</code> loader — only what env #0 needs (Review F6)</td><td><code>pkg/experiment</code></td><td>parses env-0 spec; rejects mutations outside globs</td><td><span class="badge ok">Done</span></td></tr>
+<tr><td>Sandboxed candidate runner (container/user isolation, no network, read-only hidden mounts)</td><td><code>pkg/sandbox</code></td><td>candidate cannot read evaluator dir or reach network (test proves it)</td><td><span class="badge ok">Done</span></td></tr>
+<tr><td>Immutable evaluator runner + resource accounting</td><td><code>pkg/environment</code>, <code>pkg/metrics</code></td><td>wall/GPU/VRAM/disk on every record</td><td><span class="badge ok">Done</span></td></tr>
+<tr><td>JSONL history + leaderboard + keep/revert via git worktrees</td><td><code>pkg/{leaderboard,git,artifacts}</code></td><td>revert restores champion bit-exact</td><td><span class="badge ok">Done</span></td></tr>
+<tr><td>Seed management + paired-seed comparison + eval_version/dataset_hash stamping</td><td><code>pkg/experiment</code></td><td>noise-only "win" correctly rejected on synthetic test</td><td><span class="badge ok">Done</span></td></tr>
+<tr><td>Env #0 adapter: this repo's <code>train.py</code> / val_bpb loop</td><td><code>examples/nanochat</code></td><td>overnight run produces history + leaderboard matching bare-loop behavior</td><td><span class="badge med">Built · GPU run pending</span></td></tr>
+<tr><td>CLI: <code>research init|baseline|run|leaderboard|show|compare|branch|promote</code></td><td><code>cmd/research</code></td><td>each command exercised in env-0 e2e test</td><td><span class="badge ok">Done</span></td></tr>
+</table>
+
+<h3>Phase 1 — PlayTrek worldgen, then 3DGS <span class="badge med">In progress</span></h3>
+<table>
+<tr><th>Task</th><th>Files</th><th>Verification</th><th>Status</th></tr>
+<tr><td>PlayTrek worldgen adapter (the LevelForge role): candidate = world-genesis prompts + generation loop; evaluator = frozen hallMonitor suite (11 evaluators). Gates: attempted / generated / parsed+provenance / no-errors / safety</td><td><code>playtrek/autolab/</code></td><td>baseline promoted 2026-08-30: overall_mean_score 0.769, all gates green</td><td><span class="badge ok">Done</span></td></tr>
+<tr><td>Worldgen fixture benchmark: 10 dev fixtures + 6-fixture hidden promotion corpus. Harness grew hidden-corpus promotion runs (<code>autolab promote</code>): champion re-scored 0.9217 on unseen fixtures vs 0.9201 dev — the promoted prompts generalize. Next: grow toward hundreds; rotate hidden set</td><td><code>playtrek/autolab/</code></td><td>promotion run passed on hidden corpus, 2026-08-30</td><td><span class="badge ok">Done (v1)</span></td></tr>
+<tr><td>Baseline seed-variance study (Review F4): no-change run 00005 scored paired Δ 0.0003 vs champion and was correctly rejected; run-to-run σ ≈ 0.003–0.006 puts min_effect 0.02 at 3–6σ</td><td><code>playtrek/autolab/</code></td><td>noise run rejected by the promotion rule ✓</td><td><span class="badge ok">Done</span></td></tr>
+<tr><td>Stereo benchmark capture set + 3DGS evaluator (gates, PSNR/SSIM/LPIPS, VRAM/time)</td><td><code>stereo/autoresearch/</code></td><td>held-out-view leakage test; baseline reproduces ±σ</td><td><span class="badge todo">Todo</span></td></tr>
+<tr><td>THREATS.md + one regression test per listed exploit, both envs</td><td><code>autoresearch/THREATS.md</code></td><td>each exploit attempt caught by evaluator</td><td><span class="badge todo">Todo</span></td></tr>
+<tr><td>Extract the general <code>research.yaml</code> schema from the two working adapters (Review F6)</td><td><code>pkg/experiment</code></td><td>both envs + env-0 run on the shared schema</td><td><span class="badge todo">Todo</span></td></tr>
+</table>
+
+<details><summary>Later-phase infrastructure (scheduling, bandits, knowledge graph, dashboard)</summary><div class="body">
+<ul>
+<li><b>Scheduling:</b> RTX 4070 is worker #1; queues by class (CPU-light/heavy, GPU-light/heavy, API, sim, hardware); later worker-laptop, cloud GPU, Orange Pi (capture producer only).</li>
+<li><b>Multi-armed allocation:</b> per-branch improvement history, variance, cost, novelty → explore/exploit budget split.</li>
+<li><b>Knowledge graph:</b> hypothesis→experiment→change→metric-effect→environment; queryable ("what consistently improved LPIPS?", "which CRC-inference approaches failed?").</li>
+<li><b>Dashboard:</b> one control room across environments — champion, delta this week, experiment count; drill into hypothesis/diff/logs/metrics/renders/lineage.</li>
+</ul>
+</div></details>
+
+<h2>Review findings <span class="badge ok">Reviewed 2026-08-30</span></h2>
+<p>Verdict: the thesis (evaluate() is the product) and the architecture (agent never controls the evaluator) are right. The corrections below are folded into the roadmap above.</p>
+<table>
+<tr><th>#</th><th>Severity</th><th>Finding</th><th>Resolution</th></tr>
+<tr><td>F1</td><td><span class="badge hi">High</span></td><td><b>Wrong first environment.</b> The plan skips the working loop already in this repo, and calls 3DGS "short loops" — but a real benchmark (10+ scenes × 3 seeds × full training) is hours per experiment on a 4070. Cheapest-loop-first maximizes iterations on the harness, which is the actual Phase-0/1 product.</td><td>nanochat trainer = env #0 (validates the contract against a known-good loop); LevelForge (CPU, seconds–minutes) before 3DGS.</td></tr>
+<tr><td>F2</td><td><span class="badge hi">High</span></td><td><b>Promotion is underspecified.</b> Pareto frontiers + robust scores + hidden sets never say who picks the champion. Karpathy's loop works because val_bpb is one number; the first time two candidates don't dominate each other, keep/revert is undefined.</td><td>v1: hard gates → one declared <code>promotion_score</code> per env (lexicographic/scalar). Pareto frontier is an archive, not the promotion rule.</td></tr>
+<tr><td>F3</td><td><span class="badge hi">High</span></td><td><b>Isolation weaker than assumed.</b> Path-based mutable/immutable is not a security boundary: <code>run_candidate.sh</code> is candidate-controlled, so the evaluator executing it runs candidate code with evaluator privileges. "Where practical" is not a sandbox policy on a single shared box.</td><td>Sandbox is a Phase 0 deliverable with a test proving the candidate can't read evaluator/hidden paths or reach the network.</td></tr>
+<tr><td>F4</td><td><span class="badge med">Medium</span></td><td><b>Statistics budget math.</b> Seeds × scenario suites × hidden promotion multiplies each experiment 10–50×; on one 4070 that's a handful of 3DGS experiments per night.</td><td>Measure baseline seed variance per env first; define minimum detectable effect; use paired seeds vs champion + sequential early stopping.</td></tr>
+<tr><td>F5</td><td><span class="badge med">Medium</span></td><td><b>Evaluator versioning missing.</b> §Eval-of-evaluators commits to revising evaluators, but nothing ties historical scores to an evaluator version — leaderboards silently become incomparable.</td><td><code>eval_version</code> + <code>dataset_hash</code> on every record; re-baseline champion on evaluator change.</td></tr>
+<tr><td>F6</td><td><span class="badge med">Medium</span></td><td><b>Universal contract designed too early.</b> The full research.yaml schema is speculation before any environment runs.</td><td>Phase 0 ships only what env #0 needs; the general schema is extracted from evidence after two working adapters (Phase 1 task).</td></tr>
+<tr><td>F7</td><td><span class="badge med">Medium</span></td><td><b>Ground truth is the hidden cost of the tier list.</b> Driftport, COI, TaxLens corpora, and market snapshots are human-annotation-hours, not GPU-hours; the plan treats them as free.</td><td>Tiering explicitly weights ground-truth acquisition cost; annotation work scheduled as project tasks, not assumed.</td></tr>
+<tr><td>F8</td><td><span class="badge lo">Low</span></td><td><b>Multi-agent org &amp; meta-research premature.</b> The plan gestures at this; make it binding.</td><td>Hard non-goal for Phases 0–1. Earliest high-leverage "meta" work: experiment-history summarization into researcher context (the program.md analog).</td></tr>
+<tr><td>F9</td><td><span class="badge lo">Low</span></td><td><b>LevelForge v2 metrics are research problems.</b> Pedagogical alignment and solution-diversity scoring are themselves open problems; gating v1 on them stalls the environment.</td><td>v1 gates/metrics: solvability, difficulty error, instruction coverage. Diversity/pedagogy land as non-gating v2 metrics.</td></tr>
+</table>
+
+<h2>Risks &amp; Mitigations</h2>
+<table>
+<tr><th>Risk</th><th>Mitigation</th></tr>
+<tr><td>Agent games the evaluator (benchmark overfitting, hidden-data leakage, gate circumvention)</td><td>Sandbox with proof-tests (F3); layered/rotated hidden corpora; aggregate-only feedback; THREATS.md exploits → regression tests.</td></tr>
+<tr><td>Harness over-generalizes before evidence exists</td><td>Contract extracted after two adapters (F6); every harness feature must be demanded by a running environment.</td></tr>
+<tr><td>Noise promoted as progress</td><td>Paired seeds, variance penalty, min-detectable-effect thresholds, hidden promotion pass (F4).</td></tr>
+<tr><td>Evaluator drift invalidates history</td><td>eval_version + dataset_hash stamping, re-baselining policy (F5).</td></tr>
+<tr><td>Single 4070 saturates; experiment starvation</td><td>Queue by resource class; LevelForge/API experiments run on CPU while GPU trains; cloud worker when justified by €/experiment.</td></tr>
+<tr><td>Evaluators diverge from human judgment (media, pedagogy, research)</td><td>Periodic human sampling across score bands; track metric↔human correlation; investigate disagreements.</td></tr>
+</table>
+
+<h2>Verification</h2>
+<ul>
+  <li><b>Phase 0 done when:</b> an overnight env-0 run on this repo produces a JSONL history, leaderboard, and a champion ≥ baseline val_bpb, with revert restoring the champion bit-exact, and sandbox tests proving candidate isolation.</li>
+  <li><b>Phase 1 done when:</b> LevelForge and 3DGS both run on the shared contract; each has a measured baseline σ, a THREATS.md with passing exploit regression tests, and ≥ one promoted improvement that survives the hidden promotion corpus.</li>
+  <li><b>Ongoing:</b> valid-experiment rate, duplicate-hypothesis rate, regression rate, improvement per GPU-hour tracked per environment from day one — these later become the meta-research metrics.</li>
+</ul>
+
+<h2>Open Questions</h2>
+<ul>
+  <li><b>Resolved:</b> repo is <code>autolab</code> (local at /Volumes/dev/autolab); hosting TBD (git.forgegraf.com or GitHub).</li>
+  <li><b>Resolved:</b> harness is Python + uv; candidates stay language-agnostic via the subprocess+JSON contract.</li>
+  <li><b>Resolved:</b> sandbox backends are <code>sandbox-exec</code> (macOS, deny-list profile) and <code>bwrap</code> (Linux: read-only root, masked hidden paths, unshared network namespace). All six F3 proof tests pass on both — verified on labnuc 2026-08-30. Deny-default darwin profile remains a hardening follow-up.</li>
+  <li>λ values and robust-score forms per environment (mean−λσ vs p10) — defer until baseline variance is measured.</li>
+  <li>Hidden-corpus rotation cadence and who curates rotations (human task, per F7).</li>
+</ul>
+
+<div class="footer">autoresearch harness plan · v2 (Phase 0 built) · 2026-08-30 · authored from the full planning document + review; source repo: karpathy/autoresearch clone at /Volumes/dev/autoresearch</div>
+
+</div>
