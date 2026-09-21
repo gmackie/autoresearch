@@ -9,6 +9,8 @@ os.environ["PYTORCH_ALLOC_CONF"] = "expandable_segments:True"
 os.environ["HF_HUB_DISABLE_PROGRESS_BARS"] = "1"
 
 import gc
+import json
+from pathlib import Path
 import math
 import time
 from dataclasses import dataclass, asdict
@@ -455,8 +457,9 @@ DEVICE_BATCH_SIZE = 128  # per-device batch size (reduce if OOM)
 # ---------------------------------------------------------------------------
 
 t_start = time.time()
-torch.manual_seed(42)
-torch.cuda.manual_seed(42)
+research_seed = int(os.environ.get("AUTOLAB_SEED", "42"))
+torch.manual_seed(research_seed)
+torch.cuda.manual_seed(research_seed)
 torch.set_float32_matmul_precision("high")
 device = torch.device("cuda")
 autocast_ctx = torch.amp.autocast(device_type="cuda", dtype=torch.bfloat16)
@@ -611,6 +614,18 @@ total_tokens = step * TOTAL_BATCH_SIZE
 model.eval()
 with autocast_ctx:
     val_bpb = evaluate_bpb(model, tokenizer, DEVICE_BATCH_SIZE)
+
+# Persist data-only artifacts for independent evaluation by the frozen harness.
+if os.environ.get("AUTOLAB_ARTIFACT"):
+    artifact = Path(os.environ["AUTOLAB_ARTIFACT"])
+    original_model = getattr(model, "_orig_mod", model)
+    torch.save({k: v.detach().cpu() for k, v in original_model.state_dict().items()}, artifact / "checkpoint.pt")
+    checkpoint_config = asdict(config)
+    checkpoint_config["value_embedding_gates"] = True
+    (artifact / "checkpoint.json").write_text(json.dumps({
+        "schema_version": 1, "config": checkpoint_config, "seed": research_seed,
+        "reported_bpb": val_bpb, "reported_training_seconds": total_training_time,
+    }))
 
 # Final summary
 t_end = time.time()

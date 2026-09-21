@@ -1,0 +1,164 @@
+{
+  "date": "2026-09-21",
+  "scope": "Independent checkpoint evaluator functional acceptance on RTX 4070 Ti; not a completed paired experiment or classifier training label.",
+  "worker": "lf-4070 / Ubuntu-24.04 WSL",
+  "control_commit": "69598e096669afed3f092dd4b01aebb677da9847",
+  "scoring_fingerprint": "sha256:242cb051b26820ab",
+  "checkpoint_manifest": {
+    "schema_version": 1,
+    "config": {
+      "sequence_len": 2048,
+      "vocab_size": 8192,
+      "n_layer": 4,
+      "n_head": 2,
+      "n_kv_head": 2,
+      "n_embd": 256,
+      "window_pattern": "SSSL",
+      "value_embedding_gates": true
+    },
+    "seed": 0,
+    "reported_bpb": 1.2264520826428915,
+    "reported_training_seconds": 300.11159014701843
+  },
+  "checkpoint_bytes": 33565493,
+  "valid": {
+    "gates": {
+      "checkpoint_evaluated": true,
+      "reported_bpb_matches": true,
+      "reported_training_budget": true
+    },
+    "metrics": {
+      "val_bpb": 1.2264532160398705
+    },
+    "checkpoint_sha256": "830303fe4e22452b54958dcb8abb5c533b0f08f7b23c1af1cea7183d54494e32",
+    "evaluation": {
+      "implementation": "frozen-model@1",
+      "batch_size": 8,
+      "seed": 0,
+      "reported_bpb": 1.2264520826428915,
+      "config": {
+        "sequence_len": 2048,
+        "vocab_size": 8192,
+        "n_layer": 4,
+        "n_head": 2,
+        "n_kv_head": 2,
+        "n_embd": 256,
+        "window_pattern": "SSSL",
+        "value_embedding_gates": true
+      }
+    }
+  },
+  "tampered": {
+    "gates": {
+      "checkpoint_evaluated": true,
+      "reported_bpb_matches": false,
+      "reported_training_budget": true
+    },
+    "metrics": {
+      "val_bpb": 1.2264532160398705
+    },
+    "checkpoint_sha256": "830303fe4e22452b54958dcb8abb5c533b0f08f7b23c1af1cea7183d54494e32",
+    "evaluation": {
+      "implementation": "frozen-model@1",
+      "batch_size": 8,
+      "seed": 0,
+      "reported_bpb": 0.01,
+      "config": {
+        "sequence_len": 2048,
+        "vocab_size": 8192,
+        "n_layer": 4,
+        "n_head": 2,
+        "n_kv_head": 2,
+        "n_embd": 256,
+        "window_pattern": "SSSL",
+        "value_embedding_gates": true
+      }
+    }
+  },
+  "contention": {
+    "timestamp": 1790025008.949266,
+    "processes": [
+      {
+        "pid": 203,
+        "command": "/usr/bin/python3 /opt/gentrellis/gpu-agent/gentrellis_gpu_agent.py "
+      },
+      {
+        "pid": 558,
+        "command": "/home/macki/.autolab/worktrees/dronesplat-nvs/dronesplat-nvs-00371/.venv/bin/python /home/macki/.autolab/worktrees/dronesplat-nvs/dronesplat-nvs-00371/candidate/gsplat_runner.py autolab/datasets/development/dev-000 /home/macki/autolab-envs/dronesplat-nvs/autolab/results/artifacts/dronesplat-nvs-00371/seed-0/renders/dev-000 "
+      },
+      {
+        "pid": 3913,
+        "command": ".venv/bin/python -I autolab/evaluator/evaluate.py "
+      }
+    ],
+    "gpu": "name, memory.used [MiB], utilization.gpu [%]\nNVIDIA GeForce RTX 4070 Ti, 10704 MiB, 87 %\n"
+  },
+  "cuda_smoke_log": "\nFetching 7 files:   0%|          | 0/7 [00:00<?, ?it/s]\nFetching 7 files: 100%|\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588| 7/7 [00:00<00:00, 8063.75it/s]\n.\n----------------------------------------------------------------------\nRan 1 test in 13.404s\n\nOK\n",
+  "summary": "val_bpb:          1.226452\ntraining_seconds: 300.1\ntotal_seconds:    459.8\npeak_vram_mb:     1041.8\nmfu_percent:      1.75\ntotal_tokens_M:   110.8\nnum_steps:        1691\nnum_params_M:     11.5\ndepth:            4\n",
+  "operator_abort": {
+    "status": "operator_aborted",
+    "reason": "Concurrent dronesplat-nvs job discovered; prevent remaining paired seeds and exclude from Kev labels. Seed-0 retained only for functional checkpoint validation.",
+    "initial_snapshot": "8e34fe4",
+    "seeds_requested": [
+      0,
+      1,
+      2
+    ],
+    "seeds_completed": [
+      0
+    ],
+    "no_champion_or_outcome_label": true
+  },
+  "history": [
+    {
+      "experiment_id": "nanochat-4070-checkpoint-00001",
+      "env": "nanochat-4070-checkpoint",
+      "parent": null,
+      "hypothesis": "baseline",
+      "commit": "e727b26d80eba499a2fecc724105ecb67bf57610",
+      "eval_version": "nanochat-checkpoint-eval@1.0.0",
+      "dataset_hash": "sha256:6675960a94985148",
+      "seeds": [
+        0,
+        1,
+        2
+      ],
+      "changed_paths": [],
+      "result": "error",
+      "reason": "Operator aborted after seed 0: concurrent dronesplat-nvs GPU work. Remaining seeds not run; checkpoint retained for functional scoring validation only.",
+      "per_seed_metrics": {},
+      "aggregate_metrics": {},
+      "gates": {
+        "uncontended_gpu": false,
+        "all_seeds_completed": false
+      },
+      "resources": {},
+      "timestamp": 1790024592.7889805,
+      "notes": "Operator recovery entry: harness was paused then terminated to prevent further contended runs; see artifacts/operator-abort.json. No aggregate score or label."
+    }
+  ],
+  "source_sha256": {
+    "autolab/evaluator/checkpoint_contract.py": "f53894d26cb72a361908b1bffc7333b7b47b061ec6c5d431cbbf805c5e102cc3",
+    "autolab/evaluator/evaluate.py": "b0d8f05dfe184bd5a24d0033e61c8e48db16c50407e3317c52fb1b111e7beaf8",
+    "autolab/evaluator/frozen_model.py": "ed5f27e8ae2b2ab45c0f0a0d13d1a134181304358c6c0ec67ee193b4521ea20a",
+    "autolab/evaluator/prepare.sha256": "eaa63fab976d3f813eb6a4338ae7f30be9aea12d7414cb107b5ceb5705c755e0"
+  },
+  "prepare_sha256": "4f2ba9cbb8ba8c4a3d35be405a913e2f3be3af9aea103ed52ef7b2a662058150",
+  "source_patch_since_initial": "diff --git a/autolab/evaluator/checkpoint_contract.py b/autolab/evaluator/checkpoint_contract.py\nindex 97d62c4..929c679 100644\n--- a/autolab/evaluator/checkpoint_contract.py\n+++ b/autolab/evaluator/checkpoint_contract.py\n@@ -16,6 +16,9 @@ def validate_config(config):\n             raise ValueError(f'unsupported {key}')\n     if config['n_embd']%config['n_head'] or config['n_head']%config['n_kv_head'] or (config['n_embd']//config['n_head'])%2:\n         raise ValueError('invalid attention dimensions')\n+    head_dim=config['n_embd']//config['n_head']\n+    if head_dim>256 or head_dim%8:\n+        raise ValueError('unsupported attention head dimension')\n     pattern=config['window_pattern']\n     if not isinstance(pattern,str) or not 1<=len(pattern)<=12 or set(pattern)-{'S','L'}:\n         raise ValueError('unsupported attention window pattern')\ndiff --git a/autolab/evaluator/evaluate.py b/autolab/evaluator/evaluate.py\nindex 6062407..524db3f 100644\n--- a/autolab/evaluator/evaluate.py\n+++ b/autolab/evaluator/evaluate.py\n@@ -13,17 +13,28 @@ sys.path.insert(0,str(Path(__file__).resolve().parent))\n from checkpoint_contract import artifact_file, assess, validate_config\n \n \n+def reject_nonfinite(value):\n+    raise ValueError(f\"nonfinite JSON number: {value}\")\n+\n+\n+def verify_scoring_dependency(root):\n+    expected=(Path(__file__).resolve().parent/'prepare.sha256').read_text().strip()\n+    if sha256(root/'prepare.py')!=expected:\n+        raise ValueError('prepare.py changed; update evaluator version/hash and establish a new baseline')\n+\n+\n def evaluate(artifact):\n     import torch\n     # Only the control checkout provides prepare/model code. The CLI uses -I.\n     root=Path(__file__).resolve().parents[2]\n+    verify_scoring_dependency(root)\n     sys.path.insert(0,str(root))\n     from prepare import Tokenizer,evaluate_bpb\n     from frozen_model import GPT,GPTConfig\n     metadata=artifact_file(artifact,'checkpoint.json',16384)\n     checkpoint=artifact_file(artifact,'checkpoint.pt',2_000_000_000)\n-    manifest=json.loads(metadata.read_text(),parse_constant=lambda value: (_ for _ in ()).throw(ValueError('nonfinite JSON number'))) \n-    if manifest.get('schema_version')!=1 or type(manifest.get('seed')) is not int or manifest['seed']!=int(os.environ['AUTOLAB_SEED']):\n+    manifest=json.loads(metadata.read_text(),parse_constant=reject_nonfinite)\n+    if type(manifest.get('schema_version')) is not int or manifest['schema_version']!=1 or type(manifest.get('seed')) is not int or manifest['seed']!=int(os.environ['AUTOLAB_SEED']):\n         raise ValueError('checkpoint schema/seed mismatch')\n     config=validate_config(manifest.get('config'))\n     weights=torch.load(checkpoint,map_location='cpu',weights_only=True)\ndiff --git a/autolab/evaluator/prepare.sha256 b/autolab/evaluator/prepare.sha256\nnew file mode 100644\nindex 0000000..b12599a\n--- /dev/null\n+++ b/autolab/evaluator/prepare.sha256\n@@ -0,0 +1 @@\n+4f2ba9cbb8ba8c4a3d35be405a913e2f3be3af9aea103ed52ef7b2a662058150\n",
+  "limitations": [
+    "Concurrent dronesplat-nvs job from gentrellis-gpu-agent.service; timed score excluded from research labels.",
+    "Only seed 0 completed; three-seed baseline and candidate comparison remain pending exclusive GPU access.",
+    "No checkpoint binaries in Git; weights and full logs retained on worker.",
+    "Reported training time, seed compliance and validation-shard visibility remain unenforced."
+  ],
+  "kev_service": "MainPID=0\nActiveState=inactive\n",
+  "validation_driver": "import subprocess\ns=r'''set -e\ncd ~/work/autoresearch-checkpoint\nmkdir -p autolab/results/checkpoint-validation\n.venv/bin/python tests/checkpoint_cuda_smoke.py > autolab/results/checkpoint-validation/cuda-smoke.log 2>&1\ncat autolab/results/checkpoint-validation/cuda-smoke.log\nexport AUTOLAB_SEED=0\nexport AUTOLAB_ARTIFACT=\"$PWD/autolab/results/artifacts/nanochat-4070-checkpoint-00001/seed-0\"\nexport AUTOLAB_METRICS=\"$PWD/autolab/results/checkpoint-validation/valid.json\"\n.venv/bin/python -I autolab/evaluator/evaluate.py > autolab/results/checkpoint-validation/valid.log 2>&1\ncat \"$AUTOLAB_METRICS\"\n.venv/bin/python - <<'INNER'\nimport json, pathlib,shutil\nr=pathlib.Path('autolab/results/checkpoint-validation')\nresult=json.loads((r/'valid.json').read_text())\nassert all(result['gates'].values()),result\noriginal=pathlib.Path('autolab/results/artifacts/nanochat-4070-checkpoint-00001/seed-0')\nfake=r/'tampered';fake.mkdir(exist_ok=True)\nshutil.copy2(original/'checkpoint.pt',fake/'checkpoint.pt')\nmanifest=json.loads((original/'checkpoint.json').read_text());manifest['reported_bpb']=0.01\n(fake/'checkpoint.json').write_text(json.dumps(manifest))\nINNER\nexport AUTOLAB_ARTIFACT=\"$PWD/autolab/results/checkpoint-validation/tampered\"\nexport AUTOLAB_METRICS=\"$PWD/autolab/results/checkpoint-validation/tampered.json\"\n.venv/bin/python -I autolab/evaluator/evaluate.py > autolab/results/checkpoint-validation/tampered.log 2>&1\ncat \"$AUTOLAB_METRICS\"\n.venv/bin/python - <<'INNER'\nimport json,pathlib\nr=pathlib.Path('autolab/results/checkpoint-validation')\na=json.loads((r/'valid.json').read_text());b=json.loads((r/'tampered.json').read_text())\nassert b['gates']['reported_bpb_matches'] is False\nassert a['metrics']==b['metrics'],(a,b)\nassert a['checkpoint_sha256']==b['checkpoint_sha256']\nprint('CHECKPOINT_INDEPENDENT_SCORING_AND_TAMPER_REJECTION_OK')\nINNER\n'''\nsubprocess.run(['ssh','lf-4070','wsl -d Ubuntu-24.04 -- bash -s'],input=s,text=True,check=True)\n",
+  "pure_tests": {
+    "passed": 19,
+    "command": "python -m pytest tests -q"
+  },
+  "autolab_tests": {
+    "passed": 103,
+    "build": "uv build passed"
+  }
+}

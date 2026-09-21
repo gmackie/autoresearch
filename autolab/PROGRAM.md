@@ -16,27 +16,22 @@ not by hand-edited branches and a `results.tsv`.
   computed by the frozen `prepare.evaluate_bpb` at fixed `MAX_SEQ_LEN` 2048.
   Vocab-size independent, so architecture changes compare fairly.
   `promotion.min_effect` is 0.003 (a guess; see Known truths).
-- **Also recorded** (from the summary block `train.py` prints, parsed by
-  `autolab/evaluator/evaluate.py`): `training_seconds`, `peak_vram_mb`,
-  `mfu_percent`, `total_tokens_M`, `num_steps`, `num_params_M`. Use them to
-  explain a result, not to win — only `val_bpb` decides promotion.
-- **Mutable (yours):** `train.py`, and only `train.py`. Everything in it is
-  fair game — architecture (`GPTConfig`, `DEPTH`, `ASPECT_RATIO`, `HEAD_DIM`,
-  `WINDOW_PATTERN`, value embeddings, MLP), optimizer (`MuonAdamW`, the LR
-  constants, betas, weight decay), schedules (`get_lr_multiplier`,
-  `get_muon_momentum`, `get_weight_decay`), `TOTAL_BATCH_SIZE`,
-  `DEVICE_BATCH_SIZE`, seeding, compile settings.
+- **Authoritative measurement:** the frozen evaluator loads a data-only checkpoint
+  and recomputes `val_bpb` on CUDA at batch size 8. The candidate's reported BPB
+  is only a consistency check (absolute tolerance 0.0005).
+- **Mutable (yours):** `train.py`, and only `train.py`. Optimizer, schedules,
+  batch sizes and training changes are supported. Architecture changes must
+  conform to the frozen checkpoint contract below. Arbitrary candidate forward
+  code is never executed by the evaluator.
 - **Immutable (not yours):** `prepare.py` (`TIME_BUDGET` 300 s, `MAX_SEQ_LEN`,
   tokenizer, dataloader, `evaluate_bpb`), `autolab/**` (launcher, evaluator,
   research.yaml), `pyproject.toml` (no new dependencies — you have what is in
   the shared `.venv`). Any diff outside `train.py` makes the experiment
   `invalid` before it runs.
-- **Hard gates:** `run_completed` (a `val_bpb:` line was printed),
-  `val_bpb_finite`, `time_budget_respected` (self-reported
-  `training_seconds` ≤ 330 s). A crash, a NaN, or `FAIL` from the fast-fail
-  check fails the run regardless of anything else. The summary block format
-  (`label:<spaces>value` at line start) is the evaluator's contract — keep
-  the prints at the end of `train.py` intact.
+- **Hard gates:** `checkpoint_evaluated`, `reported_bpb_matches`, and
+  `reported_training_budget` (self-reported seconds > 0 and ≤ 330), plus harness
+  exit/time gates. Missing checkpoints, invalid configs, incompatible weights,
+  and nonfinite results fail closed.
 - **Cost:** one 5-minute GPU training run per seed, ≈ 7–9 min wall with
   startup, `torch.compile` and the eval; the harness kills the candidate at
   900 s (`resources.max_seconds`) → `error`. Adding seeds multiplies this.
@@ -104,11 +99,10 @@ Winning on the pinned validation shard is not yet the whole job — and today
 it is the only job the harness can check. `research.yaml` has no
 `promotion.hidden_reveal` and `autolab/datasets/hidden` does not exist, so
 `autolab promote <id>` has no held-out corpus to re-run your experiment on
-and every champion is provisional. The plan (THREATS.md) is a rotated hidden
-shard the candidate cannot read, plus an evaluator that recomputes `val_bpb`
-from a saved checkpoint with frozen code. When that lands: a change that
-helps only because it saw the val shard, or that reports a number it did not
-earn, loses there. Treat the val parquet in `~/.cache/autoresearch/data` as
+and every champion is provisional. Checkpoint recomputation is implemented; a
+rotated hidden shard that candidates cannot read remains future work (THREATS.md).
+A checkpoint can still benefit from validation contamination, so its independently
+measured development score is not an unbiased held-out result. Treat the val parquet in `~/.cache/autoresearch/data` as
 off-limits for training even though the sandbox does not yet enforce it —
 overfitting it is a THREATS item, not a technique.
 
@@ -120,10 +114,9 @@ their ids as runs complete.
 - The 300 s clock counts only steps after the first 10 (`train.py:578`,
   `603`); compile and warm-up are free for the budget but count toward the
   900 s harness kill.
-- `torch.manual_seed(42)` is hardcoded (`train.py:458-459`). The harness
-  exports `AUTOLAB_SEED`/`SEED` per seed, but until `train.py` reads it,
-  `seeds: [0]` is a label and paired-seed statistics are inert (THREATS
-  "Seed shopping"). Only init is seeded; the dataloader is deterministic.
+- Initialization reads `AUTOLAB_SEED` (default 42 outside the harness).
+  The contract uses paired seeds `[0, 1, 2]`; the dataloader is deterministic.
+  This provides repeated measurements, not proof that candidate code honored the seed.
 - `min_effect` 0.003 is a guess written into `research.yaml`; no variance
   has been measured on this hardware.
 - Vocab is 8192 from the tokenizer (`prepare.VOCAB_SIZE`), not `GPTConfig`'s
@@ -141,14 +134,50 @@ their ids as runs complete.
 - FA3 attention is fetched via the HF `kernels` hub (`train.py:20-24`;
   `kernels-community/flash-attn3` on non-Hopper). No network in the
   sandbox — it must already be cached on the worker.
-- The evaluator regex needs `val_bpb:` (and the other labels) at line start
-  followed by a number (`evaluate.py` `FIELDS`); a candidate that changes the
-  summary format scores `run_completed: false`.
-- Eval uses `DEVICE_BATCH_SIZE` as its batch (`train.py:613`); changing it
-  changes eval memory, not the metric.
-- Read `autolab/THREATS.md`. The evaluator currently trusts self-reported
-  numbers; gaming them is recorded as an exploit, not a result, and will be
-  caught when checkpoint re-evaluation lands.
+- Candidate summary output remains useful diagnostics; it is not parsed into the
+  authoritative score. The evaluator consumes `checkpoint.pt` and `checkpoint.json`.
+- Read `autolab/THREATS.md`: training time, seed compliance, validation visibility,
+  and desktop GPU contention remain limitations.
+
+## Checkpoint contract
+
+Save a plain mapping of parameter names to detached CPU tensors in
+`$AUTOLAB_ARTIFACT/checkpoint.pt`, using `torch.save`. No modules or custom objects.
+`checkpoint.json` must declare `schema_version: 1`, integer `seed` equal to
+`AUTOLAB_SEED`, numeric `reported_bpb`, `reported_training_seconds`, and `config`.
+The configuration has exactly these fields:
+
+- `sequence_len`: 2048; `vocab_size`: 8192.
+- `n_layer`: 1–12; `n_embd`: 128–1024; `n_head` and `n_kv_head`: 1–16.
+  Width must divide evenly into heads; query heads must divide evenly into KV
+  groups. Head dimension must be a multiple of 8 and at most 256.
+- `window_pattern`: 1–12 uppercase S/L characters.
+- `value_embedding_gates`: boolean. False means fixed `v += ve`; remove gate
+  tensors from the model and export this flag as false for that variant.
+
+The architecture must match `autolab/evaluator/frozen_model.py`, including MLP,
+normalization, rotary embeddings and logit softcap. Strict tensor loading rejects
+missing/unexpected/shape-mismatched weights. Unsupported architecture proposals
+require an operator-reviewed evaluator revision and a fresh baseline, not candidate
+code execution. The operator pins `prepare.py` via `prepare.sha256` inside the
+fingerprinted evaluator directory; an unpinned scoring change fails evaluation.
+Both checkpoint files must be regular files, not symlinks; limits are 2 GB for
+weights and 16 KiB for metadata. PyTorch uses `weights_only=True`.
+
+For the RTX 4070, apply `autolab/profiles/rtx4070-checkpoint.patch` to a fresh
+writable checkout and commit before baselining. The old `rtx4070-pilot.patch`
+is historical, intended for commit `fe9ee26`, and uses the old printed-metric
+contract; do not apply it to the checkpoint evaluator.
+
+## Validate the evaluator
+
+Run `python -m pytest tests/test_checkpoint_contract.py -q` in an environment
+with pytest; these tests do not require Torch. On the CUDA worker, run
+`.venv/bin/python tests/checkpoint_cuda_smoke.py` for exact training/frozen-model
+logit parity, mixed-dtype checkpoint loading and both gate variants.
+Full-shard acceptance must also compare reported/recomputed BPB and reject a
+copied checkpoint manifest with a fabricated score; retain this separately from
+research outcomes. Never label a contended or incomplete comparison as a win/loss.
 
 ## Backlog
 

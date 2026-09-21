@@ -1,0 +1,35 @@
+--- a/autolab/research.yaml
++++ b/autolab/research.yaml
+@@ -1,4 +1,4 @@
+-name: nanochat-speedrun
++name: nanochat-4070-checkpoint
+ eval_version: "nanochat-checkpoint-eval@1.0.0"
+ 
+ # The single mutable file, per the upstream design: everything in train.py is
+@@ -43,4 +43,3 @@
+ 
+ # On gmacko-mini the main container runs near-full; keep worktrees on the
+ # roomier SSD. Linux GPU workers can override or drop this.
+-worktree_base: /Volumes/dev-ssd/autolab-worktrees
+--- a/train.py
++++ b/train.py
+@@ -437,7 +437,7 @@
+ WINDOW_PATTERN = "SSSL" # sliding window pattern: L=full, S=half context
+ 
+ # Optimization
+-TOTAL_BATCH_SIZE = 2**19 # ~524K tokens per optimizer step
++TOTAL_BATCH_SIZE = 2**16 # 65,536 tokens per optimizer step
+ EMBEDDING_LR = 0.6      # learning rate for token embeddings (Adam)
+ UNEMBEDDING_LR = 0.004  # learning rate for lm_head (Adam)
+ MATRIX_LR = 0.04        # learning rate for matrix parameters (Muon)
+@@ -449,8 +449,8 @@
+ FINAL_LR_FRAC = 0.0     # final LR as fraction of initial
+ 
+ # Model size
+-DEPTH = 8               # number of transformer layers
+-DEVICE_BATCH_SIZE = 128  # per-device batch size (reduce if OOM)
++DEPTH = 4               # number of transformer layers
++DEVICE_BATCH_SIZE = 8  # per-device batch size (reduce if OOM)
+ 
+ # ---------------------------------------------------------------------------
+ # Setup: tokenizer, model, optimizer, dataloader

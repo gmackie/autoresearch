@@ -102,13 +102,13 @@ has yet been measured. The evaluator issues listed above still apply.
 
 ## RTX 4070 Ti worker profile
 
-`autolab/profiles/rtx4070-pilot.patch` is a reproducible operator setup for the
+`autolab/profiles/rtx4070-checkpoint.patch` is a reproducible operator setup for the
 12 GB worker. Apply it in a **fresh writable checkout**, commit, and prepare data:
 
 ```sh
-git apply autolab/profiles/rtx4070-pilot.patch
+git apply autolab/profiles/rtx4070-checkpoint.patch
 git add train.py autolab/research.yaml
-git commit -m 'Configure RTX 4070 pilot baseline'
+git commit -m 'Configure RTX 4070 checkpoint baseline'
 uv sync
 uv run python prepare.py --num-shards 2 --download-workers 2
 autolab baseline
@@ -116,8 +116,10 @@ autolab baseline
 
 The profile uses depth 4, device batch 8, 65,536 tokens per optimizer step,
 `AUTOLAB_SEED`, and portable worktree placement. It preserves the training clock
-and development evaluator. Treat this as its own baseline, not a comparison with
-the upstream H100 configuration. One seed and self-reported BPB remain provisional.
+and independently recomputes development BPB from checkpoints over three paired
+seeds. Treat this as its own baseline, not a comparison with the upstream H100
+configuration or the earlier printed-metric pilot. See [PROGRAM.md](PROGRAM.md)
+for supported architectures and [THREATS.md](THREATS.md) for remaining limitations.
 
 On the worker, Kev runs on demand as `autolab-kev-gpu.service`. Autolab's
 `--rank-start-command` / `--rank-stop-command` hooks start it only for ranking,
@@ -131,3 +133,11 @@ that scored 1.180244 and was rejected. Both used 300.1 training seconds, but ach
 different token counts (229.4M versus 208.9M). One provisional negative label was
 exported. Kev was inactive in all 75 sampled training states. The initial full-file
 implementation timeout and exact-edit retry are documented in the evidence.
+
+[Checkpoint validation evidence](../docs/validation/2026-09-21-checkpoint-evaluation.json) records exact CUDA inference parity,
+full-shard recomputation at **1.226453216 BPB**, and rejection of a fabricated
+**0.01** report with the measured BPB unchanged. The candidate originally reported
+1.226452083 (difference 0.00000113). Pure contract tests: 19 passed; CUDA smoke:
+1 passed; Autolab tests: 103 passed; package build passed. These checks validate
+the scorer, not research efficacy. No new classifier weights or learning labels
+were produced from the contended run.

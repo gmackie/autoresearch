@@ -1,18 +1,18 @@
 name: nanochat-speedrun
-eval_version: "nanochat-eval@0.1.0"
+eval_version: "nanochat-checkpoint-eval@1.0.0"
 
 # The single mutable file, per the upstream design: everything in train.py is
-# fair game (architecture, optimizer, hyperparameters); prepare.py and the
-# evaluator are frozen.
+# mutable; architecture must match the frozen checkpoint contract.
+# prepare.py and the evaluator are frozen.
 mutable:
   - train.py
 
 command:
   candidate: sh autolab/run_candidate.sh
-  evaluate: python3 autolab/evaluator/evaluate.py
+  evaluate: .venv/bin/python -I autolab/evaluator/evaluate.py
 
-# train.py is not seed-parameterized upstream; one seed until it is.
-seeds: [0]
+# Harness seed controls initialization; paired measurements use the same seeds.
+seeds: [0, 1, 2]
 
 promotion:
   metric: val_bpb
@@ -22,7 +22,7 @@ promotion:
   min_effect: 0.003
 
 sandbox:
-  backend: auto          # darwin locally; 'none' (warned) on the Linux GPU box until bwrap backend lands
+  backend: auto          # seatbelt on macOS; bubblewrap on the Linux GPU worker
   allow_network: false   # data + tokenizer are pre-fetched by prepare.py
   hidden:
     - autolab/datasets/hidden
