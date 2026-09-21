@@ -70,3 +70,32 @@ LaunchAgent `io.autolab.kev`. Pass `--endpoint http://127.0.0.1:8010` to rank
 against it. The archived report above was reproduced against this endpoint.
 The service retains the released model: a separate real fine-tuning pilot was
 rejected for no ranking gain and slightly worse calibration.
+
+## Run an autonomous campaign
+
+The new `autolab campaign` command automates six idea-generation passes, Kev
+ranking, isolated implementation, experiments, and development-result feedback.
+It uses your installed Codex CLI and configured model by default. On a CUDA
+worker with this environment's dependencies and data, establish a fresh baseline
+and run a bounded campaign:
+
+```sh
+autolab baseline
+autolab campaign \
+  --endpoint http://127.0.0.1:8010 \
+  --checkpoint 'jaredpalmer/kev-0.8b@c917edefdfd72b3e9ba71455584700acc70595f6' \
+  --max-experiments 6 --budget-seconds 3600 --stage-timeout 180
+```
+
+The endpoint must be reachable from that worker; the localhost service above is
+on the development Mac. Use a forwarded or otherwise reachable endpoint on
+remote workers. Budgets count failed attempts too. Your checkout stays unchanged;
+experiments start from the champion and only declared mutable proposal paths can
+be patched. Use `autolab branch <experiment-id>` to inspect a winner.
+
+Inspect `autolab/results/campaigns/<id>/state.json`, `learning.jsonl`, and
+`outcomes.jsonl`. Each round receives recent development measurements; outcome
+labels retain automated, unreviewed patch provenance. Curate these before training
+Kev. The campaign does not automatically deploy new classifier weights. A live
+CPU toy acceptance validates orchestration; no nanochat campaign efficiency gain
+has yet been measured. The evaluator issues listed above still apply.
