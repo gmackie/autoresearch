@@ -99,3 +99,28 @@ labels retain automated, unreviewed patch provenance. Curate these before traini
 Kev. The campaign does not automatically deploy new classifier weights. A live
 CPU toy acceptance validates orchestration; no nanochat campaign efficiency gain
 has yet been measured. The evaluator issues listed above still apply.
+
+## RTX 4070 Ti worker profile
+
+`autolab/profiles/rtx4070-pilot.patch` is a reproducible operator setup for the
+12 GB worker. Apply it in a **fresh writable checkout**, commit, and prepare data:
+
+```sh
+git apply autolab/profiles/rtx4070-pilot.patch
+git add train.py autolab/research.yaml
+git commit -m 'Configure RTX 4070 pilot baseline'
+uv sync
+uv run python prepare.py --num-shards 2 --download-workers 2
+autolab baseline
+```
+
+The profile uses depth 4, device batch 8, 65,536 tokens per optimizer step,
+`AUTOLAB_SEED`, and portable worktree placement. It preserves the training clock
+and development evaluator. Treat this as its own baseline, not a comparison with
+the upstream H100 configuration. One seed and self-reported BPB remain provisional.
+
+On the worker, Kev runs on demand as `autolab-kev-gpu.service`. Autolab's
+`--rank-start-command` / `--rank-stop-command` hooks start it only for ranking,
+then release its GPU allocations before experiments. The `ssh_agent_relay.py` and
+`spool_adapter.py` helpers let the Mac run Codex without copying credentials onto
+the GPU worker. See Autolab's `docs/gpu-campaigns.md` for complete commands.
