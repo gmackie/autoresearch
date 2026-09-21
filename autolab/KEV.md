@@ -124,3 +124,10 @@ On the worker, Kev runs on demand as `autolab-kev-gpu.service`. Autolab's
 then release its GPU allocations before experiments. The `ssh_agent_relay.py` and
 `spool_adapter.py` helpers let the Mac run Codex without copying credentials onto
 the GPU worker. See Autolab's `docs/gpu-campaigns.md` for complete commands.
+
+The [first GPU campaign record](../docs/validation/2026-09-21-gpu-campaign.json)
+contains a 1.162591 BPB baseline and a Kev-selected value-embedding gate removal
+that scored 1.180244 and was rejected. Both used 300.1 training seconds, but achieved
+different token counts (229.4M versus 208.9M). One provisional negative label was
+exported. Kev was inactive in all 75 sampled training states. The initial full-file
+implementation timeout and exact-edit retry are documented in the evidence.

@@ -1,0 +1,313 @@
+{
+  "date": "2026-09-21",
+  "scope": "First real RTX 4070 Ti research campaign. Single-seed, candidate-reported BPB; provisional label, not selector superiority.",
+  "history": [
+    {
+      "experiment_id": "nanochat-4070-pilot-00001",
+      "env": "nanochat-4070-pilot",
+      "parent": null,
+      "hypothesis": "baseline",
+      "commit": "ba7e19fe74bd592b92e5ed56b9f5be3f35845dab",
+      "eval_version": "nanochat-4070-pilot-eval@0.1.0",
+      "dataset_hash": "sha256:9830f4ecc57488ee",
+      "seeds": [
+        0
+      ],
+      "changed_paths": [],
+      "result": "baseline",
+      "reason": "baseline run; promoted as initial champion",
+      "per_seed_metrics": {
+        "0": {
+          "val_bpb": 1.162591,
+          "training_seconds": 300.1,
+          "peak_vram_mb": 1041.8,
+          "mfu_percent": 3.63,
+          "total_tokens_M": 229.4,
+          "num_steps": 3500.0,
+          "num_params_M": 11.5
+        }
+      },
+      "aggregate_metrics": {
+        "mfu_percent": {
+          "mean": 3.63,
+          "std": 0.0,
+          "min": 3.63,
+          "max": 3.63,
+          "n": 1
+        },
+        "num_params_M": {
+          "mean": 11.5,
+          "std": 0.0,
+          "min": 11.5,
+          "max": 11.5,
+          "n": 1
+        },
+        "num_steps": {
+          "mean": 3500.0,
+          "std": 0.0,
+          "min": 3500.0,
+          "max": 3500.0,
+          "n": 1
+        },
+        "peak_vram_mb": {
+          "mean": 1041.8,
+          "std": 0.0,
+          "min": 1041.8,
+          "max": 1041.8,
+          "n": 1
+        },
+        "total_tokens_M": {
+          "mean": 229.4,
+          "std": 0.0,
+          "min": 229.4,
+          "max": 229.4,
+          "n": 1
+        },
+        "training_seconds": {
+          "mean": 300.1,
+          "std": 0.0,
+          "min": 300.1,
+          "max": 300.1,
+          "n": 1
+        },
+        "val_bpb": {
+          "mean": 1.162591,
+          "std": 0.0,
+          "min": 1.162591,
+          "max": 1.162591,
+          "n": 1
+        }
+      },
+      "gates": {
+        "candidate_exit_ok": true,
+        "within_time_budget": true,
+        "run_completed": true,
+        "val_bpb_finite": true,
+        "time_budget_respected": true
+      },
+      "resources": {
+        "wall_seconds": 384.331,
+        "cpu_seconds": 0.002,
+        "peak_rss_mb": 28.4
+      },
+      "timestamp": 1790016599.5446353,
+      "notes": ""
+    },
+    {
+      "experiment_id": "nanochat-4070-pilot-00002",
+      "env": "nanochat-4070-pilot",
+      "parent": "nanochat-4070-pilot-00001",
+      "hypothesis": "[9fcf846354ce4205b70c4e6a6f5aa62d:simplification-1] Replace input-dependent value-embedding gates with the fixed addition v = v + ve. Remove ve_gate modules and their initialization while retaining value embeddings.",
+      "commit": "a639cda8dc3e6f67804de43242a52637ef6fa358",
+      "eval_version": "nanochat-4070-pilot-eval@0.1.0",
+      "dataset_hash": "sha256:9830f4ecc57488ee",
+      "seeds": [
+        0
+      ],
+      "changed_paths": [
+        "train.py"
+      ],
+      "result": "rejected",
+      "reason": "mean paired improvement -0.017653 <= min_effect 0.003",
+      "per_seed_metrics": {
+        "0": {
+          "val_bpb": 1.180244,
+          "training_seconds": 300.1,
+          "peak_vram_mb": 1025.7,
+          "mfu_percent": 3.31,
+          "total_tokens_M": 208.9,
+          "num_steps": 3187.0,
+          "num_params_M": 11.5
+        }
+      },
+      "aggregate_metrics": {
+        "mfu_percent": {
+          "mean": 3.31,
+          "std": 0.0,
+          "min": 3.31,
+          "max": 3.31,
+          "n": 1
+        },
+        "num_params_M": {
+          "mean": 11.5,
+          "std": 0.0,
+          "min": 11.5,
+          "max": 11.5,
+          "n": 1
+        },
+        "num_steps": {
+          "mean": 3187.0,
+          "std": 0.0,
+          "min": 3187.0,
+          "max": 3187.0,
+          "n": 1
+        },
+        "peak_vram_mb": {
+          "mean": 1025.7,
+          "std": 0.0,
+          "min": 1025.7,
+          "max": 1025.7,
+          "n": 1
+        },
+        "total_tokens_M": {
+          "mean": 208.9,
+          "std": 0.0,
+          "min": 208.9,
+          "max": 208.9,
+          "n": 1
+        },
+        "training_seconds": {
+          "mean": 300.1,
+          "std": 0.0,
+          "min": 300.1,
+          "max": 300.1,
+          "n": 1
+        },
+        "val_bpb": {
+          "mean": 1.180244,
+          "std": 0.0,
+          "min": 1.180244,
+          "max": 1.180244,
+          "n": 1
+        }
+      },
+      "gates": {
+        "candidate_exit_ok": true,
+        "within_time_budget": true,
+        "run_completed": true,
+        "val_bpb_finite": true,
+        "time_budget_respected": true
+      },
+      "resources": {
+        "wall_seconds": 397.1,
+        "cpu_seconds": 0.003,
+        "peak_rss_mb": 27.8
+      },
+      "timestamp": 1790017503.2098448,
+      "notes": ""
+    }
+  ],
+  "candidate_patch": "diff --git a/train.py b/train.py\nindex b6a2d08..e1cbc6c 100644\n--- a/train.py\n+++ b/train.py\n@@ -71,8 +71,6 @@ class CausalSelfAttention(nn.Module):\n         self.c_k = nn.Linear(self.n_embd, self.n_kv_head * self.head_dim, bias=False)\n         self.c_v = nn.Linear(self.n_embd, self.n_kv_head * self.head_dim, bias=False)\n         self.c_proj = nn.Linear(self.n_embd, self.n_embd, bias=False)\n-        self.ve_gate_channels = 32\n-        self.ve_gate = nn.Linear(self.ve_gate_channels, self.n_kv_head, bias=False) if has_ve(layer_idx, config.n_layer) else None\n \n     def forward(self, x, ve, cos_sin, window_size):\n         B, T, C = x.size()\n@@ -80,11 +78,10 @@ class CausalSelfAttention(nn.Module):\n         k = self.c_k(x).view(B, T, self.n_kv_head, self.head_dim)\n         v = self.c_v(x).view(B, T, self.n_kv_head, self.head_dim)\n \n-        # Value residual (ResFormer): mix in value embedding with input-dependent gate per head\n+        # Value residual (ResFormer): add value embedding with fixed unit weight\n         if ve is not None:\n             ve = ve.view(B, T, self.n_kv_head, self.head_dim)\n-            gate = 2 * torch.sigmoid(self.ve_gate(x[..., :self.ve_gate_channels]))\n-            v = v + gate.unsqueeze(-1) * ve\n+            v = v + ve\n \n         cos, sin = cos_sin\n         q, k = apply_rotary_emb(q, cos, sin), apply_rotary_emb(k, cos, sin)\n@@ -167,10 +164,6 @@ class GPT(nn.Module):\n         # Value embeddings\n         for ve in self.value_embeds.values():\n             torch.nn.init.uniform_(ve.weight, -s, s)\n-        # Gate weights init to zero (sigmoid(0)=0.5, scaled by 2 -> 1.0 = neutral)\n-        for block in self.transformer.h:\n-            if block.attn.ve_gate is not None:\n-                torch.nn.init.zeros_(block.attn.ve_gate.weight)\n         # Rotary embeddings\n         head_dim = self.config.n_embd // self.config.n_head\n         cos, sin = self._precompute_rotary_embeddings(self.rotary_seq_len, head_dim)\n",
+  "checks": {
+    "working_source_unchanged": true,
+    "index_unchanged": true,
+    "training_samples": 75,
+    "kev_inactive_in_all_training_samples": true
+  },
+  "retry_note": "Original live generation was reused with identical context after full-file implementation timed out. Both rankings were live CUDA. Retry used local exact edits; failed attempt retained.",
+  "outcome_labels": [
+    {
+      "state": {
+        "context": {
+          "environment": "nanochat-4070-pilot",
+          "parent": "nanochat-4070-pilot-00001",
+          "champion_commit": "ba7e19fe74bd592b92e5ed56b9f5be3f35845dab",
+          "code_commit": "ba9ed4a93ea7081b9c53bb6603c52e3a1dae334b",
+          "contract_hash": "014c37c1230129ee5a362c3d6b8d8da41d9af5b01a735796443d7e03820595ed",
+          "eval_version": "nanochat-4070-pilot-eval@0.1.0",
+          "mutable": [
+            "train.py"
+          ],
+          "objective": {
+            "metric": "val_bpb",
+            "direction": "minimize",
+            "min_effect": 0.003,
+            "hidden_reveal": [],
+            "seeds": null
+          },
+          "champion_metrics": {
+            "mfu_percent": {
+              "mean": 3.63,
+              "std": 0.0,
+              "min": 3.63,
+              "max": 3.63,
+              "n": 1
+            },
+            "num_params_M": {
+              "mean": 11.5,
+              "std": 0.0,
+              "min": 11.5,
+              "max": 11.5,
+              "n": 1
+            },
+            "num_steps": {
+              "mean": 3500.0,
+              "std": 0.0,
+              "min": 3500.0,
+              "max": 3500.0,
+              "n": 1
+            },
+            "peak_vram_mb": {
+              "mean": 1041.8,
+              "std": 0.0,
+              "min": 1041.8,
+              "max": 1041.8,
+              "n": 1
+            },
+            "total_tokens_M": {
+              "mean": 229.4,
+              "std": 0.0,
+              "min": 229.4,
+              "max": 229.4,
+              "n": 1
+            },
+            "training_seconds": {
+              "mean": 300.1,
+              "std": 0.0,
+              "min": 300.1,
+              "max": 300.1,
+              "n": 1
+            },
+            "val_bpb": {
+              "mean": 1.162591,
+              "std": 0.0,
+              "min": 1.162591,
+              "max": 1.162591,
+              "n": 1
+            }
+          },
+          "max_seconds": 900
+        },
+        "proposal": {
+          "id": "simplification-1",
+          "family": "value-embedding-gate",
+          "lane": "gain",
+          "change": "Replace input-dependent value-embedding gates with the fixed addition v = v + ve. Remove ve_gate modules and their initialization while retaining value embeddings.",
+          "mechanism": "Speculative gain: removing small gate projections, sigmoid operations, and associated optimizer work may increase training throughput. The fixed gate matches its initialized value of one.",
+          "diagnostic": "Compare timed steps, tokens processed, and development val_bpb against the baseline under the unchanged training budget.",
+          "falsifier": "Reject if development val_bpb does not improve by at least 0.003, or removing adaptive gating harms convergence despite improved throughput.",
+          "evidence": [
+            "train.py: CausalSelfAttention.forward computes gate = 2 * sigmoid(ve_gate(...)).",
+            "train.py: GPT.init_weights initializes gate weights to zero, yielding a gate of one.",
+            "nanochat-4070-pilot-00001"
+          ],
+          "paths": [
+            "train.py"
+          ],
+          "cost_seconds": 300
+        }
+      },
+      "questions": {
+        "improves": {
+          "type": "noul",
+          "instructions": "Will implementing this proposal improve the measured objective beyond the stated minimum effect on a majority of paired seeds?",
+          "label": false
+        }
+      },
+      "provenance": {
+        "experiment_id": "nanochat-4070-pilot-00002",
+        "parent": "nanochat-4070-pilot-00001",
+        "report_id": "ffc9e70a914e41c0af58d8240a5a69e9",
+        "family": "value-embedding-gate",
+        "environment": "nanochat-4070-pilot",
+        "timestamp": 1790017503.2098448,
+        "paired_improvements": [
+          -0.01765300000000014
+        ],
+        "label_quality": "provisional: depends on environment evaluator integrity",
+        "fidelity": "automated-unreviewed: adapter patch a639cda8dc3e6f67804de43242a52637ef6fa358; semantic fidelity requires review",
+        "selected": true
+      }
+    }
+  ]
+}
