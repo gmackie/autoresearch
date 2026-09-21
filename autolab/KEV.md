@@ -44,3 +44,29 @@ environment. Curate train/development/promotion splits by campaign and family,
 fine-tune from a released checkpoint, and freeze the selected version for each
 research campaign. An outcome-trained model can be selected with `rank
 --strategy outcome`; pretrained models default to four rubric questions.
+
+## First live ranking
+
+On 2026-09-21, pinned `jaredpalmer/kev-0.8b` revision
+`c917edefdfd72b3e9ba71455584700acc70595f6` scored 24 authored hypotheses
+on MPS. The [complete report](../docs/validation/2026-09-21-kev-ranking.json)
+contains the pool, API requests/responses and advisory scores. The shortlist was:
+
+- H09: lower DEVICE_BATCH_SIZE to fit the worker (ranked).
+- H10: compare device batches 16 and 32 after establishing a fitting baseline (ranked).
+- H24: halve embedding LR with matrix LR fixed (ranked).
+- H06: test depth four (ranked).
+- H02: higher matrix LR (exploration).
+- H13: zero weight decay (exploration).
+
+H12, H19 and H20 remained measurement work. These are proposed experiments,
+not completed training runs. Respect prerequisites: H10 depends on first finding
+a fitting baseline. Some ideas are conditional followups, not observed near misses.
+The archived context predates this documentation commit; create a fresh brief
+before further ranking. This result does not reorder the authoritative backlog.
+
+A dedicated Autolab service is now installed at `http://127.0.0.1:8010` under
+LaunchAgent `io.autolab.kev`. Pass `--endpoint http://127.0.0.1:8010` to rank
+against it. The archived report above was reproduced against this endpoint.
+The service retains the released model: a separate real fine-tuning pilot was
+rejected for no ranking gain and slightly worse calibration.
