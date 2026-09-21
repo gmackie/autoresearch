@@ -157,3 +157,11 @@ Ranked, ready-to-run hypotheses live in `autolab/BACKLOG.md` (one item per
 Operator section for work that needs a human; Done keyed by experiment id).
 Take the top item, run it, move it to Done, and fold what you learned into
 "Known truths" above. Keep at least five items queued.
+
+## Kev-assisted proposal selection
+
+An optional shotgun brainstorming and ranking workflow is documented in
+[KEV.md](KEV.md). Use `autolab ideas` to generate/score a pool upstream of this
+loop, retain exploration and measurement slots, and link executed proposals to
+actual results. Scores are advisory; the frozen evaluator still decides
+promotion. Re-rank whenever the champion changes.
