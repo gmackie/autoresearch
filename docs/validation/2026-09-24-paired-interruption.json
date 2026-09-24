@@ -1,0 +1,741 @@
+{
+  "date": "2026-09-24",
+  "status": {
+    "status": "interrupted",
+    "reason": "New dronesplat-nvs-00373 work was dispatched during baseline seed 2; contention guard terminated our comparison. Seeds 0 and 1 verified; no completed baseline, candidate or learning label.",
+    "timestamp": 1790254136.3187873
+  },
+  "history_record": {
+    "experiment_id": "nanochat-4070-checkpoint-00002",
+    "env": "nanochat-4070-checkpoint",
+    "parent": null,
+    "hypothesis": "baseline",
+    "commit": "4ab706244cc895184b1be989b85b7e0ac55d10a9",
+    "eval_version": "nanochat-checkpoint-eval@1.0.0",
+    "dataset_hash": "sha256:242cb051b26820ab",
+    "seeds": [
+      0,
+      1,
+      2
+    ],
+    "changed_paths": [],
+    "result": "error",
+    "reason": "New dronesplat-nvs-00373 work was dispatched during baseline seed 2; contention guard terminated our comparison. Seeds 0 and 1 verified; no completed baseline, candidate or learning label.",
+    "per_seed_metrics": {},
+    "aggregate_metrics": {},
+    "gates": {
+      "all_seeds_completed": false,
+      "uncontended_gpu": false
+    },
+    "resources": {},
+    "timestamp": 1790254136.332471,
+    "notes": "Operator recovery after external contention guard; per-seed artifacts retained, aggregate intentionally empty."
+  },
+  "control_commit": "69598e096669afed3f092dd4b01aebb677da9847",
+  "seed_evaluations": {
+    "seed-0": {
+      "gates": {
+        "checkpoint_evaluated": true,
+        "reported_bpb_matches": true,
+        "reported_training_budget": true
+      },
+      "metrics": {
+        "val_bpb": 1.1622036849953419
+      },
+      "checkpoint_sha256": "360ecce1aa7c1d74f9f5860a2107b0924af3687ec07647869a77b3cfd9c0cafc",
+      "evaluation": {
+        "implementation": "frozen-model@1",
+        "batch_size": 8,
+        "seed": 0,
+        "reported_bpb": 1.1621738060121978,
+        "config": {
+          "sequence_len": 2048,
+          "vocab_size": 8192,
+          "n_layer": 4,
+          "n_head": 2,
+          "n_kv_head": 2,
+          "n_embd": 256,
+          "window_pattern": "SSSL",
+          "value_embedding_gates": true
+        }
+      }
+    },
+    "seed-1": {
+      "gates": {
+        "checkpoint_evaluated": true,
+        "reported_bpb_matches": true,
+        "reported_training_budget": true
+      },
+      "metrics": {
+        "val_bpb": 1.163734739956013
+      },
+      "checkpoint_sha256": "9632b280a519b6d5201c65fa63c7ac9c5c4e8f5927a60016f44846dad19fda7d",
+      "evaluation": {
+        "implementation": "frozen-model@1",
+        "batch_size": 8,
+        "seed": 1,
+        "reported_bpb": 1.1637136885017414,
+        "config": {
+          "sequence_len": 2048,
+          "vocab_size": 8192,
+          "n_layer": 4,
+          "n_head": 2,
+          "n_kv_head": 2,
+          "n_embd": 256,
+          "window_pattern": "SSSL",
+          "value_embedding_gates": true
+        }
+      }
+    }
+  },
+  "gpu_samples": [
+    {
+      "time": 1790253160.6245522,
+      "other_research": [],
+      "kev": "MainPID=0\nActiveState=inactive\n",
+      "gpu": "1128 MiB, 2 %",
+      "stage": "baseline"
+    },
+    {
+      "time": 1790253170.729908,
+      "other_research": [],
+      "kev": "MainPID=0\nActiveState=inactive\n",
+      "gpu": "1428 MiB, 0 %",
+      "stage": "baseline"
+    },
+    {
+      "time": 1790253180.796207,
+      "other_research": [],
+      "kev": "MainPID=0\nActiveState=inactive\n",
+      "gpu": "1492 MiB, 0 %",
+      "stage": "baseline"
+    },
+    {
+      "time": 1790253189.4044406,
+      "other_research": [],
+      "kev": "MainPID=0\nActiveState=inactive\n",
+      "gpu": "2458 MiB, 29 %",
+      "stage": "baseline"
+    },
+    {
+      "time": 1790253199.4621823,
+      "other_research": [],
+      "kev": "MainPID=0\nActiveState=inactive\n",
+      "gpu": "2714 MiB, 88 %",
+      "stage": "baseline"
+    },
+    {
+      "time": 1790253209.530516,
+      "other_research": [],
+      "kev": "MainPID=0\nActiveState=inactive\n",
+      "gpu": "2714 MiB, 80 %",
+      "stage": "baseline"
+    },
+    {
+      "time": 1790253219.592362,
+      "other_research": [],
+      "kev": "MainPID=0\nActiveState=inactive\n",
+      "gpu": "2714 MiB, 84 %",
+      "stage": "baseline"
+    },
+    {
+      "time": 1790253228.101915,
+      "other_research": [],
+      "kev": "MainPID=0\nActiveState=inactive\n",
+      "gpu": "2714 MiB, 74 %",
+      "stage": "baseline"
+    },
+    {
+      "time": 1790253238.1741834,
+      "other_research": [],
+      "kev": "MainPID=0\nActiveState=inactive\n",
+      "gpu": "2714 MiB, 81 %",
+      "stage": "baseline"
+    },
+    {
+      "time": 1790253248.2293742,
+      "other_research": [],
+      "kev": "MainPID=0\nActiveState=inactive\n",
+      "gpu": "2714 MiB, 83 %",
+      "stage": "baseline"
+    },
+    {
+      "time": 1790253257.2480311,
+      "other_research": [],
+      "kev": "MainPID=0\nActiveState=inactive\n",
+      "gpu": "2714 MiB, 76 %",
+      "stage": "baseline"
+    },
+    {
+      "time": 1790253267.3187509,
+      "other_research": [],
+      "kev": "MainPID=0\nActiveState=inactive\n",
+      "gpu": "2714 MiB, 81 %",
+      "stage": "baseline"
+    },
+    {
+      "time": 1790253277.3709455,
+      "other_research": [],
+      "kev": "MainPID=0\nActiveState=inactive\n",
+      "gpu": "2714 MiB, 90 %",
+      "stage": "baseline"
+    },
+    {
+      "time": 1790253286.6103163,
+      "other_research": [],
+      "kev": "MainPID=0\nActiveState=inactive\n",
+      "gpu": "2714 MiB, 88 %",
+      "stage": "baseline"
+    },
+    {
+      "time": 1790253296.6668634,
+      "other_research": [],
+      "kev": "MainPID=0\nActiveState=inactive\n",
+      "gpu": "2714 MiB, 77 %",
+      "stage": "baseline"
+    },
+    {
+      "time": 1790253306.7293746,
+      "other_research": [],
+      "kev": "MainPID=0\nActiveState=inactive\n",
+      "gpu": "2714 MiB, 91 %",
+      "stage": "baseline"
+    },
+    {
+      "time": 1790253315.2903035,
+      "other_research": [],
+      "kev": "MainPID=0\nActiveState=inactive\n",
+      "gpu": "2714 MiB, 88 %",
+      "stage": "baseline"
+    },
+    {
+      "time": 1790253325.3491013,
+      "other_research": [],
+      "kev": "MainPID=0\nActiveState=inactive\n",
+      "gpu": "2714 MiB, 86 %",
+      "stage": "baseline"
+    },
+    {
+      "time": 1790253335.4042664,
+      "other_research": [],
+      "kev": "MainPID=0\nActiveState=inactive\n",
+      "gpu": "2714 MiB, 88 %",
+      "stage": "baseline"
+    },
+    {
+      "time": 1790253345.4700105,
+      "other_research": [],
+      "kev": "MainPID=0\nActiveState=inactive\n",
+      "gpu": "2714 MiB, 75 %",
+      "stage": "baseline"
+    },
+    {
+      "time": 1790253353.962712,
+      "other_research": [],
+      "kev": "MainPID=0\nActiveState=inactive\n",
+      "gpu": "2714 MiB, 75 %",
+      "stage": "baseline"
+    },
+    {
+      "time": 1790253364.0232904,
+      "other_research": [],
+      "kev": "MainPID=0\nActiveState=inactive\n",
+      "gpu": "2714 MiB, 81 %",
+      "stage": "baseline"
+    },
+    {
+      "time": 1790253374.0745387,
+      "other_research": [],
+      "kev": "MainPID=0\nActiveState=inactive\n",
+      "gpu": "2714 MiB, 95 %",
+      "stage": "baseline"
+    },
+    {
+      "time": 1790253382.2138212,
+      "other_research": [],
+      "kev": "MainPID=0\nActiveState=inactive\n",
+      "gpu": "2714 MiB, 88 %",
+      "stage": "baseline"
+    },
+    {
+      "time": 1790253392.302038,
+      "other_research": [],
+      "kev": "MainPID=0\nActiveState=inactive\n",
+      "gpu": "2714 MiB, 88 %",
+      "stage": "baseline"
+    },
+    {
+      "time": 1790253402.358486,
+      "other_research": [],
+      "kev": "MainPID=0\nActiveState=inactive\n",
+      "gpu": "2714 MiB, 88 %",
+      "stage": "baseline"
+    },
+    {
+      "time": 1790253410.6243925,
+      "other_research": [],
+      "kev": "MainPID=0\nActiveState=inactive\n",
+      "gpu": "2714 MiB, 93 %",
+      "stage": "baseline"
+    },
+    {
+      "time": 1790253420.6813092,
+      "other_research": [],
+      "kev": "MainPID=0\nActiveState=inactive\n",
+      "gpu": "2714 MiB, 81 %",
+      "stage": "baseline"
+    },
+    {
+      "time": 1790253430.7452774,
+      "other_research": [],
+      "kev": "MainPID=0\nActiveState=inactive\n",
+      "gpu": "2714 MiB, 80 %",
+      "stage": "baseline"
+    },
+    {
+      "time": 1790253439.2519732,
+      "other_research": [],
+      "kev": "MainPID=0\nActiveState=inactive\n",
+      "gpu": "2714 MiB, 92 %",
+      "stage": "baseline"
+    },
+    {
+      "time": 1790253449.3357942,
+      "other_research": [],
+      "kev": "MainPID=0\nActiveState=inactive\n",
+      "gpu": "2714 MiB, 87 %",
+      "stage": "baseline"
+    },
+    {
+      "time": 1790253459.3866491,
+      "other_research": [],
+      "kev": "MainPID=0\nActiveState=inactive\n",
+      "gpu": "2714 MiB, 87 %",
+      "stage": "baseline"
+    },
+    {
+      "time": 1790253467.7504716,
+      "other_research": [],
+      "kev": "MainPID=0\nActiveState=inactive\n",
+      "gpu": "2714 MiB, 85 %",
+      "stage": "baseline"
+    },
+    {
+      "time": 1790253477.8090732,
+      "other_research": [],
+      "kev": "MainPID=0\nActiveState=inactive\n",
+      "gpu": "2714 MiB, 86 %",
+      "stage": "baseline"
+    },
+    {
+      "time": 1790253487.8708947,
+      "other_research": [],
+      "kev": "MainPID=0\nActiveState=inactive\n",
+      "gpu": "2714 MiB, 83 %",
+      "stage": "baseline"
+    },
+    {
+      "time": 1790253497.932798,
+      "other_research": [],
+      "kev": "MainPID=0\nActiveState=inactive\n",
+      "gpu": "2714 MiB, 89 %",
+      "stage": "baseline"
+    },
+    {
+      "time": 1790253506.3197207,
+      "other_research": [],
+      "kev": "MainPID=0\nActiveState=inactive\n",
+      "gpu": "2716 MiB, 38 %",
+      "stage": "baseline"
+    },
+    {
+      "time": 1790253516.372025,
+      "other_research": [],
+      "kev": "MainPID=0\nActiveState=inactive\n",
+      "gpu": "2716 MiB, 34 %",
+      "stage": "baseline"
+    },
+    {
+      "time": 1790253526.4327462,
+      "other_research": [],
+      "kev": "MainPID=0\nActiveState=inactive\n",
+      "gpu": "2716 MiB, 34 %",
+      "stage": "baseline"
+    },
+    {
+      "time": 1790253534.8497474,
+      "other_research": [],
+      "kev": "MainPID=0\nActiveState=inactive\n",
+      "gpu": "3494 MiB, 71 %",
+      "stage": "baseline"
+    },
+    {
+      "time": 1790253544.9126418,
+      "other_research": [],
+      "kev": "MainPID=0\nActiveState=inactive\n",
+      "gpu": "3494 MiB, 58 %",
+      "stage": "baseline"
+    },
+    {
+      "time": 1790253554.9698036,
+      "other_research": [],
+      "kev": "MainPID=0\nActiveState=inactive\n",
+      "gpu": "3494 MiB, 60 %",
+      "stage": "baseline"
+    },
+    {
+      "time": 1790253563.3659277,
+      "other_research": [],
+      "kev": "MainPID=0\nActiveState=inactive\n",
+      "gpu": "3494 MiB, 70 %",
+      "stage": "baseline"
+    },
+    {
+      "time": 1790253573.4145963,
+      "other_research": [],
+      "kev": "MainPID=0\nActiveState=inactive\n",
+      "gpu": "3494 MiB, 70 %",
+      "stage": "baseline"
+    },
+    {
+      "time": 1790253583.4690192,
+      "other_research": [],
+      "kev": "MainPID=0\nActiveState=inactive\n",
+      "gpu": "1428 MiB, 0 %",
+      "stage": "baseline"
+    },
+    {
+      "time": 1790253591.8374302,
+      "other_research": [],
+      "kev": "MainPID=0\nActiveState=inactive\n",
+      "gpu": "2176 MiB, 90 %",
+      "stage": "baseline"
+    },
+    {
+      "time": 1790253601.897156,
+      "other_research": [],
+      "kev": "MainPID=0\nActiveState=inactive\n",
+      "gpu": "2458 MiB, 0 %",
+      "stage": "baseline"
+    },
+    {
+      "time": 1790253611.9550643,
+      "other_research": [],
+      "kev": "MainPID=0\nActiveState=inactive\n",
+      "gpu": "2714 MiB, 86 %",
+      "stage": "baseline"
+    },
+    {
+      "time": 1790253620.2528343,
+      "other_research": [],
+      "kev": "MainPID=0\nActiveState=inactive\n",
+      "gpu": "2714 MiB, 82 %",
+      "stage": "baseline"
+    },
+    {
+      "time": 1790253630.3040752,
+      "other_research": [],
+      "kev": "MainPID=0\nActiveState=inactive\n",
+      "gpu": "2714 MiB, 92 %",
+      "stage": "baseline"
+    },
+    {
+      "time": 1790253640.3576474,
+      "other_research": [],
+      "kev": "MainPID=0\nActiveState=inactive\n",
+      "gpu": "2714 MiB, 88 %",
+      "stage": "baseline"
+    },
+    {
+      "time": 1790253650.417569,
+      "other_research": [],
+      "kev": "MainPID=0\nActiveState=inactive\n",
+      "gpu": "2714 MiB, 81 %",
+      "stage": "baseline"
+    },
+    {
+      "time": 1790253658.7992377,
+      "other_research": [],
+      "kev": "MainPID=0\nActiveState=inactive\n",
+      "gpu": "2714 MiB, 78 %",
+      "stage": "baseline"
+    },
+    {
+      "time": 1790253668.8533077,
+      "other_research": [],
+      "kev": "MainPID=0\nActiveState=inactive\n",
+      "gpu": "2714 MiB, 82 %",
+      "stage": "baseline"
+    },
+    {
+      "time": 1790253678.917089,
+      "other_research": [],
+      "kev": "MainPID=0\nActiveState=inactive\n",
+      "gpu": "2714 MiB, 86 %",
+      "stage": "baseline"
+    },
+    {
+      "time": 1790253687.2868276,
+      "other_research": [],
+      "kev": "MainPID=0\nActiveState=inactive\n",
+      "gpu": "2714 MiB, 88 %",
+      "stage": "baseline"
+    },
+    {
+      "time": 1790253697.3434923,
+      "other_research": [],
+      "kev": "MainPID=0\nActiveState=inactive\n",
+      "gpu": "2714 MiB, 93 %",
+      "stage": "baseline"
+    },
+    {
+      "time": 1790253707.3991716,
+      "other_research": [],
+      "kev": "MainPID=0\nActiveState=inactive\n",
+      "gpu": "2714 MiB, 90 %",
+      "stage": "baseline"
+    },
+    {
+      "time": 1790253715.7020607,
+      "other_research": [],
+      "kev": "MainPID=0\nActiveState=inactive\n",
+      "gpu": "2714 MiB, 94 %",
+      "stage": "baseline"
+    },
+    {
+      "time": 1790253725.7577274,
+      "other_research": [],
+      "kev": "MainPID=0\nActiveState=inactive\n",
+      "gpu": "2714 MiB, 81 %",
+      "stage": "baseline"
+    },
+    {
+      "time": 1790253735.8134174,
+      "other_research": [],
+      "kev": "MainPID=0\nActiveState=inactive\n",
+      "gpu": "2714 MiB, 89 %",
+      "stage": "baseline"
+    },
+    {
+      "time": 1790253744.0824797,
+      "other_research": [],
+      "kev": "MainPID=0\nActiveState=inactive\n",
+      "gpu": "2714 MiB, 84 %",
+      "stage": "baseline"
+    },
+    {
+      "time": 1790253754.1356626,
+      "other_research": [],
+      "kev": "MainPID=0\nActiveState=inactive\n",
+      "gpu": "2714 MiB, 75 %",
+      "stage": "baseline"
+    },
+    {
+      "time": 1790253764.2047756,
+      "other_research": [],
+      "kev": "MainPID=0\nActiveState=inactive\n",
+      "gpu": "2714 MiB, 90 %",
+      "stage": "baseline"
+    },
+    {
+      "time": 1790253772.4456828,
+      "other_research": [],
+      "kev": "MainPID=0\nActiveState=inactive\n",
+      "gpu": "2714 MiB, 88 %",
+      "stage": "baseline"
+    },
+    {
+      "time": 1790253782.514482,
+      "other_research": [],
+      "kev": "MainPID=0\nActiveState=inactive\n",
+      "gpu": "2714 MiB, 87 %",
+      "stage": "baseline"
+    },
+    {
+      "time": 1790253792.573952,
+      "other_research": [],
+      "kev": "MainPID=0\nActiveState=inactive\n",
+      "gpu": "2714 MiB, 85 %",
+      "stage": "baseline"
+    },
+    {
+      "time": 1790253802.6483412,
+      "other_research": [],
+      "kev": "MainPID=0\nActiveState=inactive\n",
+      "gpu": "2714 MiB, 88 %",
+      "stage": "baseline"
+    },
+    {
+      "time": 1790253810.9664612,
+      "other_research": [],
+      "kev": "MainPID=0\nActiveState=inactive\n",
+      "gpu": "2714 MiB, 81 %",
+      "stage": "baseline"
+    },
+    {
+      "time": 1790253821.0301502,
+      "other_research": [],
+      "kev": "MainPID=0\nActiveState=inactive\n",
+      "gpu": "2714 MiB, 87 %",
+      "stage": "baseline"
+    },
+    {
+      "time": 1790253831.0931969,
+      "other_research": [],
+      "kev": "MainPID=0\nActiveState=inactive\n",
+      "gpu": "2714 MiB, 83 %",
+      "stage": "baseline"
+    },
+    {
+      "time": 1790253839.4689186,
+      "other_research": [],
+      "kev": "MainPID=0\nActiveState=inactive\n",
+      "gpu": "2714 MiB, 80 %",
+      "stage": "baseline"
+    },
+    {
+      "time": 1790253849.5269547,
+      "other_research": [],
+      "kev": "MainPID=0\nActiveState=inactive\n",
+      "gpu": "2714 MiB, 84 %",
+      "stage": "baseline"
+    },
+    {
+      "time": 1790253859.6181521,
+      "other_research": [],
+      "kev": "MainPID=0\nActiveState=inactive\n",
+      "gpu": "2714 MiB, 84 %",
+      "stage": "baseline"
+    },
+    {
+      "time": 1790253867.9549618,
+      "other_research": [],
+      "kev": "MainPID=0\nActiveState=inactive\n",
+      "gpu": "2714 MiB, 91 %",
+      "stage": "baseline"
+    },
+    {
+      "time": 1790253878.0178566,
+      "other_research": [],
+      "kev": "MainPID=0\nActiveState=inactive\n",
+      "gpu": "2714 MiB, 85 %",
+      "stage": "baseline"
+    },
+    {
+      "time": 1790253888.072896,
+      "other_research": [],
+      "kev": "MainPID=0\nActiveState=inactive\n",
+      "gpu": "2714 MiB, 90 %",
+      "stage": "baseline"
+    },
+    {
+      "time": 1790253896.4762304,
+      "other_research": [],
+      "kev": "MainPID=0\nActiveState=inactive\n",
+      "gpu": "2714 MiB, 87 %",
+      "stage": "baseline"
+    },
+    {
+      "time": 1790253906.5364263,
+      "other_research": [],
+      "kev": "MainPID=0\nActiveState=inactive\n",
+      "gpu": "2714 MiB, 81 %",
+      "stage": "baseline"
+    },
+    {
+      "time": 1790253916.5989075,
+      "other_research": [],
+      "kev": "MainPID=0\nActiveState=inactive\n",
+      "gpu": "2716 MiB, 33 %",
+      "stage": "baseline"
+    },
+    {
+      "time": 1790253924.819817,
+      "other_research": [],
+      "kev": "MainPID=0\nActiveState=inactive\n",
+      "gpu": "2716 MiB, 40 %",
+      "stage": "baseline"
+    },
+    {
+      "time": 1790253934.8850613,
+      "other_research": [],
+      "kev": "MainPID=0\nActiveState=inactive\n",
+      "gpu": "2716 MiB, 37 %",
+      "stage": "baseline"
+    },
+    {
+      "time": 1790253944.9471536,
+      "other_research": [],
+      "kev": "MainPID=0\nActiveState=inactive\n",
+      "gpu": "3494 MiB, 69 %",
+      "stage": "baseline"
+    },
+    {
+      "time": 1790253955.0016222,
+      "other_research": [],
+      "kev": "MainPID=0\nActiveState=inactive\n",
+      "gpu": "3494 MiB, 58 %",
+      "stage": "baseline"
+    },
+    {
+      "time": 1790253963.4286683,
+      "other_research": [],
+      "kev": "MainPID=0\nActiveState=inactive\n",
+      "gpu": "3494 MiB, 59 %",
+      "stage": "baseline"
+    },
+    {
+      "time": 1790253973.480123,
+      "other_research": [],
+      "kev": "MainPID=0\nActiveState=inactive\n",
+      "gpu": "3494 MiB, 65 %",
+      "stage": "baseline"
+    },
+    {
+      "time": 1790253983.5563407,
+      "other_research": [],
+      "kev": "MainPID=0\nActiveState=inactive\n",
+      "gpu": "3494 MiB, 64 %",
+      "stage": "baseline"
+    },
+    {
+      "time": 1790253991.8566096,
+      "other_research": [
+        {
+          "pid": 68447,
+          "cmd": "uv run --project /home/macki/autolab-core autolab run --env /home/macki/autolab-envs/dronesplat-nvs -H In `gsplat_runner.py`\u2019s training loss, add a differentiable low-frequency term equal to the mean squared error between 2\u00d72 average-pooled `pred` and `imgs[t]`, weighted at 0.10 while reducing the existing L1 weight to 0.75 and retaining the 0.15 structural term, to improve scene-wide color and parallax consistency without discarding fine-detail gradients. "
+        },
+        {
+          "pid": 68450,
+          "cmd": "/home/macki/autolab-core/.venv/bin/python /home/macki/autolab-core/.venv/bin/autolab run --env /home/macki/autolab-envs/dronesplat-nvs -H In `gsplat_runner.py`\u2019s training loss, add a differentiable low-frequency term equal to the mean squared error between 2\u00d72 average-pooled `pred` and `imgs[t]`, weighted at 0.10 while reducing the existing L1 weight to 0.75 and retaining the 0.15 structural term, to improve scene-wide color and parallax consistency without discarding fine-detail gradients. "
+        },
+        {
+          "pid": 68462,
+          "cmd": "bwrap --die-with-parent --unshare-pid --ro-bind / / --dev-bind /dev /dev --proc /proc --tmpfs /tmp --bind /home/macki/.autolab/worktrees/dronesplat-nvs/dronesplat-nvs-00373 /home/macki/.autolab/worktrees/dronesplat-nvs/dronesplat-nvs-00373 --tmpfs /home/macki/autolab-envs/dronesplat-nvs/autolab/datasets/hidden --tmpfs /home/macki/.autolab/worktrees/dronesplat-nvs/dronesplat-nvs-00373/autolab/datasets/hidden --tmpfs /home/macki/autolab-envs/dronesplat-nvs/autolab/evaluator --tmpfs /home/macki/.au"
+        },
+        {
+          "pid": 68463,
+          "cmd": "bwrap --die-with-parent --unshare-pid --ro-bind / / --dev-bind /dev /dev --proc /proc --tmpfs /tmp --bind /home/macki/.autolab/worktrees/dronesplat-nvs/dronesplat-nvs-00373 /home/macki/.autolab/worktrees/dronesplat-nvs/dronesplat-nvs-00373 --tmpfs /home/macki/autolab-envs/dronesplat-nvs/autolab/datasets/hidden --tmpfs /home/macki/.autolab/worktrees/dronesplat-nvs/dronesplat-nvs-00373/autolab/datasets/hidden --tmpfs /home/macki/autolab-envs/dronesplat-nvs/autolab/evaluator --tmpfs /home/macki/.au"
+        },
+        {
+          "pid": 68464,
+          "cmd": "/bin/sh -c .venv/bin/python candidate/synthesize.py "
+        },
+        {
+          "pid": 68465,
+          "cmd": ".venv/bin/python candidate/synthesize.py "
+        },
+        {
+          "pid": 68486,
+          "cmd": "/home/macki/.autolab/worktrees/dronesplat-nvs/dronesplat-nvs-00373/.venv/bin/python /home/macki/.autolab/worktrees/dronesplat-nvs/dronesplat-nvs-00373/candidate/gsplat_runner.py autolab/datasets/development/dev-000 /home/macki/autolab-envs/dronesplat-nvs/autolab/results/artifacts/dronesplat-nvs-00373/seed-0/renders/dev-000 "
+        }
+      ],
+      "kev": "MainPID=0\nActiveState=inactive\n",
+      "gpu": "1428 MiB, 0 %",
+      "stage": "baseline"
+    }
+  ],
+  "no_champion": true,
+  "no_candidate_or_label": true,
+  "operator_driver": "import subprocess\nremote=r'''import pathlib,subprocess,json,time,os,signal,hashlib\nroot=pathlib.Path.home()/'work/autoresearch-checkpoint'\nevidence=root/'autolab/results/paired-2026-09-24';evidence.mkdir(exist_ok=False)\noriginal=(root/'train.py').read_text()\n\ndef snapshot():\n others=[]\n for p in pathlib.Path('/proc').iterdir():\n  if not p.name.isdigit():continue\n  try:cmd=(p/'cmdline').read_bytes().replace(b'\\0',b' ').decode(errors='replace')\n  except OSError:continue\n  if any(x in cmd for x in ['gsplat_runner.py','candidate/synthesize.py','microduck-locomotion/.venv','playtrek-worldgen/.venv']):others.append({'pid':int(p.name),'cmd':cmd[:500]})\n kev=subprocess.check_output(['systemctl','--user','show','autolab-kev-gpu','-p','MainPID','-p','ActiveState'],text=True)\n return {'time':time.time(),'other_research':others,'kev':kev,'gpu':subprocess.check_output(['nvidia-smi','--query-gpu=memory.used,utilization.gpu','--format=csv,noheader'],text=True).strip()}\n\ndef run(stage,args):\n pre=snapshot()\n if pre['other_research'] or 'MainPID=0' not in pre['kev']:raise RuntimeError('GPU unavailable before '+stage)\n with (evidence/(stage+'.log')).open('w') as log:\n  p=subprocess.Popen(args,cwd=root,stdout=log,stderr=subprocess.STDOUT,start_new_session=True)\n  with (evidence/'gpu-samples.jsonl').open('a') as f:\n   while p.poll() is None:\n    state=snapshot();state['stage']=stage;f.write(json.dumps(state)+'\\n');f.flush()\n    if state['other_research'] or 'MainPID=0' not in state['kev']:\n     os.killpg(p.pid,signal.SIGTERM)\n     raise RuntimeError('Contention detected; comparison invalid. Inspect descendants before retry.')\n    time.sleep(10)\n  if p.returncode:raise RuntimeError(stage+' failed: '+(evidence/(stage+'.log')).read_text()[-1500:])\n print(stage,(evidence/(stage+'.log')).read_text(),flush=True)\n\ncli=str(pathlib.Path.home()/'work/autolab-kev/.venv/bin/autolab')\ntry:\n subprocess.run(['git','diff','--exit-code'],cwd=root,check=True)\n (evidence/'control-commit.txt').write_text(subprocess.check_output(['git','rev-parse','HEAD'],cwd=root,text=True))\n run('baseline',[cli,'baseline','--env',str(root),'--keep-worktree'])\n board=json.loads((root/'autolab/results/leaderboard.json').read_text())\n assert board['champion'] is not None\n updated=original\n edits=[\n ('        self.ve_gate_channels = 32\\n        self.ve_gate = nn.Linear(self.ve_gate_channels, self.n_kv_head, bias=False) if has_ve(layer_idx, config.n_layer) else None\\n',''),\n ('        # Value residual (ResFormer): mix in value embedding with input-dependent gate per head','        # Value residual (ResFormer): add value embedding with fixed unit weight'),\n ('            gate = 2 * torch.sigmoid(self.ve_gate(x[..., :self.ve_gate_channels]))\\n            v = v + gate.unsqueeze(-1) * ve','            v = v + ve'),\n ('        # Gate weights init to zero (sigmoid(0)=0.5, scaled by 2 -> 1.0 = neutral)\\n        for block in self.transformer.h:\\n            if block.attn.ve_gate is not None:\\n                torch.nn.init.zeros_(block.attn.ve_gate.weight)\\n',''),\n ('checkpoint_config[\"value_embedding_gates\"] = True','checkpoint_config[\"value_embedding_gates\"] = False')]\n for before,after in edits:\n  assert updated.count(before)==1,before\n  updated=updated.replace(before,after)\n (root/'train.py').write_text(updated)\n (evidence/'candidate.patch').write_text(subprocess.check_output(['git','diff','--','train.py'],cwd=root,text=True))\n run('candidate',[cli,'run','--env',str(root),'--keep-worktree','-H','Repeat Kev-selected gate removal with independent checkpoint scoring and paired seeds 0,1,2; prior single-seed pilot was worse.'])\n (evidence/'status.json').write_text(json.dumps({'status':'complete','time':time.time()}))\nfinally:\n (root/'train.py').write_text(original)\n'''\nsubprocess.run(['ssh','lf-4070','wsl -d Ubuntu-24.04 -- python3 -u -'],input=remote,text=True,check=True)\n"
+}
